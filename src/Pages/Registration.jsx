@@ -4,6 +4,7 @@ import Signup from '../components/Auth/Signup'
 import { useState } from 'react'
 
 const Registration = () => {
+  
     const [showLogin, setShowLogin] = useState(true); // Correct usage of useState
   return (
     <div>

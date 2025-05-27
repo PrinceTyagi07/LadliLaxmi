@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState , useEffect , useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 const Signup = () => {
+  const navigate = useNavigate(); // Initialize useNavigate
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -11,12 +12,19 @@ const Signup = () => {
     confirmPassword: "",
     referredBy: "", // This is needed by the backend
   });
+
+  const [sucess, setSucess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
+  // useEffect to show how navigation can be triggered on some condition
+  useEffect(() => {
+    if (sucess) {
+    window.location.reload(); // Refresh page after successful signup
+  }
+  }, [sucess]);
 
-  const navigate = useNavigate(); // Initialize useNavigate
-
+  
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -67,9 +75,10 @@ const Signup = () => {
       );
 
       if (signupResponse.data.success) {
+       setSucess(true)
         console.log("Registration successful:", signupResponse.data);
-        // Navigate to the home page on successful signup
         navigate("/account");
+        // Navigate to the home page on successful signup
       } else {
         // If backend sends a specific message for failure
         setError(signupResponse.data.message || "Signup failed. Please try again.");

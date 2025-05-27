@@ -6,8 +6,8 @@ import Main from '../components/Profile/main'
 const Profile = () => {
   
     const [user, setUser] = useState(null);
-    // const userId = localStorage.getItem("userId"); // Assumes user ID is stored here
-  const userId ="68331a883b83f9270554b112"
+    const userId = localStorage.getItem("userId"); // Assumes user ID is stored here
+  // const userId ="6835edbefba8fc45c7a67120"
     useEffect(() => {
       const fetchData = async () => {
         try {

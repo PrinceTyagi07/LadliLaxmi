@@ -41,51 +41,24 @@ exports.register = async (req, res) => {
     }
 
     let referrer = null;
-    let slotUser = null; // This will be the user under whom the new user is placed in the matrix
-
-    // if (referredBy) {
-    //   // If a referral code is provided
-    //   referrer = await User.findOne({ referralCode: referredBy });
-    //   if (!referrer) {
-    //     return res.status(400).json({ success: false, message: "Invalid referrer code provided." });
-    //   }
-    //   // If referrer is found, find a slot under them in the matrix
-    //   slotUser = await findMatrixSlot(referrer._id);
-    // } else {
-    //   // No referral code provided - check if this is the first user
-    //   const totalUsers = await User.countDocuments();
-    //   if (totalUsers === 0) {
-    //     // This is the very first user on the platform
-    //     // No specific referrer, they become a root user
-    //     slotUser = null; // Or you could set slotUser to themselves if findMatrixSlot can handle it
-    //     console.log("First user registering without a referral code.");
-    //   } else {
-    //     // Not the first user, but no referral code provided.
-    //     // This user needs to be placed by the system (e.g., under the oldest active user,
-    //     // or a designated admin/root account, or find a random open slot at the top level).
-    //     // For simplicity, we'll try to find any available slot if no referrer is given.
-    //     // Your `findMatrixSlot` utility needs to be able to handle a `null` or `undefined` input
-    //     // for `referredBy` to find a top-level slot.
-    //     slotUser = await findMatrixSlot(null); // Pass null to indicate no specific referrer
-    //     if (!slotUser) {
-    //       return res.status(500).json({ success: false, message: "System error: Unable to find a placement slot for new user without referral." });
-    //     }
-    //   }
-    // }
-
+    let slotUser = null;
    
     if (referredBy) {
+      console.log("referredBy",referredBy)
       // Case 1: Referral code provided by the new user
-      referrer = await User.findOne({ referralCode: referredBy });
+    referrer = await User.findOne({ referralCode:referredBy });
+      console.log("referrer",referrer)
       if (!referrer) {
         return res.status(400).json({ success: false, message: "Invalid referrer code provided." });
       }
       // Find a slot under the provided referrer
+      console.log(referrer._id);
       slotUser = await findMatrixSlot(referrer._id);
       if (!slotUser) {
         return res.status(400).json({ success: false, message: `No available matrix slot found under referrer with ID: ${referrer._id}.` });
       }
-    } else {
+    } 
+    else {
       // Case 2: No referral code provided, place under an admin
       referrer = await User.findOne({ role: "admin" }); // Find any admin user
       if (!referrer) {
@@ -100,6 +73,8 @@ exports.register = async (req, res) => {
         // This might happen if the admin's direct slots are full and `findMatrixSlot` can't find a deeper slot.
         return res.status(500).json({ success: false, message: "Admin's matrix slots are full. Unable to place new user without referral." });
       }
+
+
     }
 
     const hashed = await bcrypt.hash(password, 10);
@@ -129,6 +104,7 @@ exports.register = async (req, res) => {
       // add them to the directReferrals of the *original referrer*.
       // Note: `slotUser` might not be the direct referrer if matrix logic places them deeper.
       // If `referredBy` was provided and valid, `referrer` would be that user.
+      console.log(referrer._id.toString()+"->"+slotUser._id.toString())
       if (referrer && referrer._id.toString() === slotUser._id.toString()) {
           // If the slotUser is the direct referrer
           referrer.directReferrals.push(newUser._id);
@@ -201,7 +177,7 @@ exports.login = async (req, res) => {
       token,
       user: { // Return necessary user details
           _id: user._id,
-          username: user.name, // Assuming 'name' is used as username
+          name: user.name, // Assuming 'name' is used as username
           email: user.email,
           currentLevel: user.currentLevel,
           walletBalance: user.walletBalance,

@@ -1,107 +1,135 @@
 // ===== models/User.js =====
 const mongoose = require("mongoose");
-require("./Donation"); 
+require("./Donation");
+require("./WalletTransaction");
 const userSchema = new mongoose.Schema(
-  {
-    name: { type: String,
-       required: true,
-       trim: true },
+   {
+      name: {
+         type: String,
+         required: true,
 
-    email: {
-      type: String,
+      },
 
-      required: true,
+      email: {
+         type: String,
 
-      unique: true,
+         required: true,
 
-      lowercase: true,
+         unique: true,
 
-      trim: true,
+         lowercase: true,
 
-      match: [/.+@.+\..+/,
-         "Invalid email"]
-    },
+         trim: true,
 
-    password: { type: String,
-       required: true,
-       minlength: 6 },
+         match: [/.+@.+\..+/,
+            "Invalid email"]
+      },
 
-    phone: { type: String,
-       trim: true },
+      password: {
+         type: String,
+         required: true,
+         minlength: 6
+      },
 
-    referralCode: { type: String,
-       unique: true,
-       required: true },
+      phone: {
+         type: String,
+         trim: true
+      },
 
-    referredBy: { type: String,
-       required: true },
+      referralCode: {
+         type: String,
+         unique: true,
+         required: true
+      },
 
-    matrixChildren: [{ type: mongoose.Schema.Types.ObjectId,
-       ref: "User" }],
+      referredBy: {
+         type: String,
+      },
 
-    currentLevel: { type: Number,
-       default: 0 },
+      matrixChildren: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "User"
+      }],
 
-    donationsSent: [{ type: mongoose.Schema.Types.ObjectId,
-       ref: "Donation" }],
+      currentLevel: {
+         type: Number,
+         default: 0
+      },
 
-    donationsReceived: [{ type: mongoose.Schema.Types.ObjectId,
-       ref: "Donation" }],
+      donationsSent: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Donation"
+      }],
 
-    walletBalance: { type: Number,
-       default: 0,
-       min: 0 },
+      donationsReceived: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Donation"
+      }],
 
-    walletTransactions: [{ type: mongoose.Schema.Types.ObjectId,
-       ref: "WalletTransaction" }],
+      walletBalance: {
+         type: Number,
+         default: 0,
+         min: 0
+      },
 
-    directReferrals: [{ type: mongoose.Schema.Types.ObjectId,
-       ref: "User" }],
+      walletTransactions: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "WalletTransaction"
+      }],
 
-    bankDetails: {
-      accountNumber: String,
+      directReferrals: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "User"
+      }],
 
-      accountName: String,
+      bankDetails: {
+         accountNumber: String,
 
-      bankName: String,
+         accountName: String,
 
-      ifscCode: String,
+         bankName: String,
 
-    },
+         ifscCode: String,
 
-    role: { type: String,
-       enum: ["user",
-       "superadmin"],
-       default: "user" },
+      },
 
-    isActive: { type: Boolean,
-       default: true },
+      role: {
+         type: String,
+         enum: ["user",
+            "Admin"],
+         default: "user"
+      },
 
-    lastLogin: Date,
+      isActive: {
+         type: Boolean,
+         default: true
+      },
 
-  },
+      lastLogin: Date,
 
-  {
-    timestamps: true,
+   },
 
-    toJSON: { virtuals: true },
+   {
+      timestamps: true,
 
-    toObject: { virtuals: true },
+      toJSON: { virtuals: true },
 
-  }
+      toObject: { virtuals: true },
+
+   }
 );
 
 userSchema.virtual("totalDonationsReceived").get(function () {
-  return this.donationsReceived.length;
+   return this.donationsReceived.length;
 });
 
 userSchema.virtual("totalDonationsSent").get(function () {
-  return this.donationsSent.length;
+   return this.donationsSent.length;
 });
 
-userSchema.index({ referralCode: 1 }, { unique: true });
-userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ referredBy: 1 });
-userSchema.index({ currentLevel: 1 });
+// userSchema.index({ referralCode: 1 }, { unique: true });
+// userSchema.index({ email: 1 }, { unique: true });
+// userSchema.index({ referredBy: 1 });
+// userSchema.index({ currentLevel: 1 });
 
-module.exports = mongoose.model("User",userSchema);
+module.exports = mongoose.model("User", userSchema);

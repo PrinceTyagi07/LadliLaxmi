@@ -7,7 +7,7 @@ import DashboardOverview from "./DashboardOverview";
 
 const Main = ({user}) => {
   return (
-    <div className="flex -translate-x-50  flex-col ">
+    <div className="flex mr-10  flex-col ">
       
       <Routes>
         <Route path="/dashboardOverview" element={<DashboardOverview user={user} />} />

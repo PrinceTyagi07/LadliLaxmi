@@ -10,7 +10,7 @@ const InfoCard = ({ title, value, color }) => (
 
 const DashboardOverview = ({ user }) => {
   if (!user) return null;
-
+console.log(user)
   const handleCopy = () => {
     navigator.clipboard.writeText(user.referralCode);
     alert("Referral code copied to clipboard!");
@@ -30,12 +30,12 @@ const DashboardOverview = ({ user }) => {
     {
       title: "Direct Referrals",
       value: user.directReferrals?.length ?? 0,
-      color: "purple",
+      color: "blue",
     },
     {
       title: "Total Donations Received",
       value: user.totalDonationsReceived ?? 0,
-      color: "yellow",
+      color: "amber",
     },
     {
       title: "Total Donations Sent",
@@ -57,13 +57,13 @@ const DashboardOverview = ({ user }) => {
         </span>
         <button
           onClick={handleCopy}
-          className="flex items-center gap-1 px-3 py-1 text-sm font-semibold bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          className="flex items-center gap-1 px-3 py-1 text-sm font-semibold bg-blue-600 text-blue rounded-md hover:bg-blue-700 transition"
         >
           <ClipboardCopy size={16} /> Copy
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-amber-700 sm:gap-6 mb-10">
         {overviewData.map((item, idx) => (
           <InfoCard
             key={idx}

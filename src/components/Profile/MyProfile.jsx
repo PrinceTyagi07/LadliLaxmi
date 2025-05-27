@@ -97,7 +97,7 @@ const MyProfile = ({ user: propUser }) => {
                             <ul className="list-disc list-inside space-y-2">
                                 {user.directReferrals.map((ref) => (
                                     <li key={ref._id} className="text-lg text-gray-700">
-                                        {ref.username} ({ref.email}) - Level: {ref.currentLevel}
+                                        {ref.name} ({ref.email}) - Level: {ref.currentLevel}
                                     </li>
                                 ))}
                             </ul>
