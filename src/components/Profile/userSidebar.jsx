@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-
+import Logout from "../"
 const UserSidebar = ({ user, onLogout }) => {
   return (
     <div className="w-64 bg-gray-800 text-gray-100 p-6 shadow-lg flex flex-col min-h-full top-0 left-0">
