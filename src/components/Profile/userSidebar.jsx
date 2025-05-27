@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import Logout from "../"
+import Logout from "../Auth/Logout"
 const UserSidebar = ({ user, onLogout }) => {
   return (
     <div className="w-64 bg-gray-800 text-gray-100 p-6 shadow-lg flex flex-col min-h-full top-0 left-0">
@@ -84,12 +84,13 @@ const UserSidebar = ({ user, onLogout }) => {
       </nav>
 
       <div className="mt-auto pt-6 border-t border-gray-700">
-        <button
+        {/* <button
           onClick={onLogout}
           className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 text-lg font-semibold"
         >
           Logout
-        </button>
+        </button> */}
+        <Logout />
       </div>
     </div>
   );
