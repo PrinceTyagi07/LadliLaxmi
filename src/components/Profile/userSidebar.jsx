@@ -28,7 +28,7 @@ const UserSidebar = ({ user, onLogout }) => {
           {user?.currentLevel === 0 && (
             <li>
               <NavLink
-                to="/account/dashboard"
+                to="/account/donation"
                 className={({ isActive }) =>
                   `block px-4 py-3 rounded-lg transition-colors duration-200 text-lg ${
                     isActive ? 'bg-blue-600 text-white font-semibold' : 'text-gray-200 hover:bg-gray-700 hover:text-white'
@@ -83,13 +83,8 @@ const UserSidebar = ({ user, onLogout }) => {
         </ul>
       </nav>
 
-      <div className="mt-auto pt-6 border-t border-gray-700">
-        {/* <button
-          onClick={onLogout}
-          className="w-full px-4 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 text-lg font-semibold"
-        >
-          Logout
-        </button> */}
+      <div className="mx-auto pt-6 border-t border-gray-700">
+      
         <Logout />
       </div>
     </div>
