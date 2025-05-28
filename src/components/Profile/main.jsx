@@ -49,7 +49,7 @@ const Main = ({ user }) => {
           }
         />
       </Routes>
-    
+    </div>
   );
 };
 
