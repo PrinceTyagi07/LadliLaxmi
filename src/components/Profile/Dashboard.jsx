@@ -3,7 +3,7 @@ import React from "react";
 
 const TreeNode = ({ user, level = 0 }) => {
   return (
-    <div className={`ml-${level * 4} mb-4`}>
+    <div className={`ml-${level * 4} mb-4 `}>
       <div className="bg-blue-100 p-2 rounded-md shadow-md text-center">
         <div className="font-semibold">{user.name}</div>
         <div className="text-sm text-gray-600">{user.email}</div>
@@ -19,13 +19,17 @@ const TreeNode = ({ user, level = 0 }) => {
   );
 };
 
-const Dashboard = ({ matrixChildren }) => {
+const Dashboard = ({ user,matrixChildren }) => {
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg mt-8">
       <h2 className="text-3xl font-bold text-center mb-6 text-blue-700">
         Matrix Network
       </h2>
-      <div className="flex justify-center flex-wrap">
+      <div className="flex flex-col gap-4 justify-center flex-wrap">
+        <div className="bg-blue-100 p-2 rounded-md shadow-md text-center">
+        <div className="font-semibold">{user.name}</div>
+        <div className="text-sm text-gray-600">{user.email}</div>
+      </div>
         {matrixChildren?.length > 0 ? (
           matrixChildren.map((child, idx) => (
             <TreeNode key={idx} user={child} />

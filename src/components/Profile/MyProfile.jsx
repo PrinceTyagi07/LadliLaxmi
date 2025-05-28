@@ -27,6 +27,7 @@ const MyProfile = ({ user: propUser }) => {
                     },
                 };
                 const { data } = await axios.get('/api/users/my-profile', config);
+                
                 setUser(data);
                 setLoading(false);
             } catch (err) {
