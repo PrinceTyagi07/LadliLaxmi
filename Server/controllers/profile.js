@@ -6,7 +6,7 @@ exports.getProfile = async (req, res) => {
     const userId = req.params.id;
     const user = await User.findById(userId)
       .populate("directReferrals", "name email")
-      .populate("matrixChildren", "name email")
+      .populate("matrixChildren", "name email referralCode currentLevel")
       .populate("donationsSent")
       .populate("donationsReceived")
       .populate("walletTransactions")
@@ -37,4 +37,5 @@ exports.getProfile = async (req, res) => {
     return res.status(500).json({ message: "Server error." });
   }
 };
+
 
