@@ -11,7 +11,7 @@ const Donation = ({user}) => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [razorpayLoading, setRazorpayLoading] = useState(false); // For loading the Razorpay script
-    const amountToPay = 300; // Fixed amount for Level 1 activation
+    const amountToPay = 400; // Fixed amount for Level 1 activation
 
     // Load Razorpay script dynamically
     useEffect(() => {
@@ -90,8 +90,8 @@ const Donation = ({user}) => {
                                 razorpay_order_id: response.razorpay_order_id,
                                 razorpay_payment_id: response.razorpay_payment_id,
                                 razorpay_signature: response.razorpay_signature,
-                                userId: user._id,
-                                currentLevel: 1, // Confirm level for verification
+                                userId: user.Id,
+                                currentLevel: 0, // Confirm level for verification
                             },
                             config
                         );
@@ -120,8 +120,8 @@ const Donation = ({user}) => {
                     contact: user.phone || '', // Prefill user's phone if available
                 },
                 notes: {
-                    userId: user._id,
-                    currentLevel: 1,
+                    userId: user.Id,
+                    currentLevel: 0,
                     type: 'level_activation',
                 },
                 theme: {

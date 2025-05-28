@@ -1,10 +1,23 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
-
+import { jwtDecode } from "jwt-decode";
+import {useToken} from "../hooks/usetoken"
 const Navbar = () => {
+
     const navigate = useNavigate(); // Call useNavigate at the top level
-  // Navigation items
+    const token = useToken();
+  let user = null;
+
+  if (token) {
+    try {
+      user = jwtDecode(token);
+    } catch (err) {
+      console.error("Invalid token", err);
+      localStorage.removeItem("token");
+    }
+  }
+
   const navItem = [
     { link: "HOME", path: "home" },
     { link: "ABOUT", path: "about" },
@@ -59,9 +72,11 @@ const Navbar = () => {
 
 
       <div className="flex space-x-6 cursor-pointer text-lg font-medium hover:text-amber-600 transition">
+        
+        
         <button className="shadow px-2 shadow-amber-300" type="button"
-        onClick={() => navigate("/account")}>
-          Register / Login
+        onClick={() => navigate(user ? "/userdashboard" : "/account")}>
+          {user ? "Profile" : "Register / Login"}
         </button>
         
       </div>

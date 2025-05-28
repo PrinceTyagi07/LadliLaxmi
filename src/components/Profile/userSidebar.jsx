@@ -14,7 +14,7 @@ const UserSidebar = ({ user, onLogout }) => {
         <ul className="space-y-3">
           <li>
             <NavLink
-              to="/account/dashboardOverview"
+              to="/userdashboard/dashboardOverview"
               className={({ isActive }) =>
                 `block px-4 py-3 rounded-lg transition-colors duration-200 text-lg ${
                   isActive ? 'bg-blue-600 text-white font-semibold' : 'text-gray-200 hover:bg-gray-700 hover:text-white'
@@ -28,7 +28,7 @@ const UserSidebar = ({ user, onLogout }) => {
           {user?.currentLevel === 0 && (
             <li>
               <NavLink
-                to="/account/donation"
+                to="/userdashboard/donation"
                 className={({ isActive }) =>
                   `block px-4 py-3 rounded-lg transition-colors duration-200 text-lg ${
                     isActive ? 'bg-blue-600 text-white font-semibold' : 'text-gray-200 hover:bg-gray-700 hover:text-white'
@@ -43,7 +43,7 @@ const UserSidebar = ({ user, onLogout }) => {
           {user?.currentLevel > 0 && user?.currentLevel < 11 && (
             <li>
               <NavLink
-                to={`/account/upgrade/${user.currentLevel + 1}`}
+                to={`/userdashboard/upgrade/${user.currentLevel + 1}`}
                 className={({ isActive }) =>
                   `block px-4 py-3 rounded-lg transition-colors duration-200 text-lg ${
                     isActive ? 'bg-blue-600 text-white font-semibold' : 'text-gray-200 hover:bg-gray-700 hover:text-white'
@@ -57,7 +57,7 @@ const UserSidebar = ({ user, onLogout }) => {
 
           <li>
             <NavLink
-              to="/account/downline"
+              to="/userdashboard/downline"
               className={({ isActive }) =>
                 `block px-4 py-3 rounded-lg transition-colors duration-200 text-lg ${
                   isActive ? 'bg-blue-600 text-white font-semibold' : 'text-gray-200 hover:bg-gray-700 hover:text-white'
@@ -70,7 +70,7 @@ const UserSidebar = ({ user, onLogout }) => {
 
           <li>
             <NavLink
-              to="/account/transactions"
+              to="/userdashboard/transactions"
               className={({ isActive }) =>
                 `block px-4 py-3 rounded-lg transition-colors duration-200 text-lg ${
                   isActive ? 'bg-blue-600 text-white font-semibold' : 'text-gray-200 hover:bg-gray-700 hover:text-white'
@@ -79,6 +79,7 @@ const UserSidebar = ({ user, onLogout }) => {
             >
               Transaction History
             </NavLink>
+
           </li>
         </ul>
       </nav>

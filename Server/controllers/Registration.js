@@ -60,25 +60,21 @@ exports.register = async (req, res) => {
       console.log(referrer._id);
       slotUser = await findMatrixSlot(referrer._id);
       if (!slotUser) {
-        return res
-          .status(400)
-          .json({
-            success: false,
-            message: `No available matrix slot found under referrer with ID: ${referrer._id}.`,
-          });
+        return res.status(400).json({
+          success: false,
+          message: `No available matrix slot found under referrer with ID: ${referrer._id}.`,
+        });
       }
     } else {
       // Case 2: No referral code provided, place under an admin
       referrer = await User.findOne({ role: "admin" }); // Find any admin user
       if (!referrer) {
         // This is a critical error if no admin exists to place unreferred users
-        return res
-          .status(500)
-          .json({
-            success: false,
-            message:
-              "No admin user found to place unreferred signups. Please ensure an admin account exists.",
-          });
+        return res.status(500).json({
+          success: false,
+          message:
+            "No admin user found to place unreferred signups. Please ensure an admin account exists.",
+        });
       }
       console.log(
         `No referral code provided. Placing user under admin: ${referrer.email}`
@@ -88,16 +84,15 @@ exports.register = async (req, res) => {
       slotUser = await findMatrixSlot(referrer._id);
       if (!slotUser) {
         // This might happen if the admin's direct slots are full and `findMatrixSlot` can't find a deeper slot.
-        return res
-          .status(500)
-          .json({
-            success: false,
-            message:
-              "Admin's matrix slots are full. Unable to place new user without referral.",
-          });
+        return res.status(500).json({
+          success: false,
+          message:
+            "Admin's matrix slots are full. Unable to place new user without referral.",
+        });
       }
     }
-
+    console.log("slotUser", slotUser);
+    console.log("slotUser referre code", slotUser.referralCode);
     const hashed = await bcrypt.hash(password, 10);
     // Generate a unique referral code for the new user based on their _id
     // This will be set by the schema's default function, but ensure _id is available first
@@ -111,9 +106,9 @@ exports.register = async (req, res) => {
       name,
       email,
       password: hashed,
-      // confirmPassword is not stored in DB, only used for validation
       referralCode: newReferralCode, // Assign generated code
-      referredBy: slotUser ? slotUser.referralCode : null, // Set referredBy to the referralCode of the user they are placed under
+      sponserdBy: referredBy,
+      referredBy: slotUser.referralCode , // Set referredBy to the referralCode of the user they are placed under
       currentLevel: 0, // Initial level, can be updated upon activation/donation
     });
 
@@ -124,14 +119,12 @@ exports.register = async (req, res) => {
       // Add new user to the slotUser's matrixChildren
       slotUser.matrixChildren.push(newUser._id);
       await slotUser.save();
-          // If a referrer was identified (either explicit or admin), add new user to their directReferrals
+      // If a referrer was identified (either explicit or admin), add new user to their directReferrals
       // This ensures the person who directly "referred" (or system placed under) gets the direct referral credit.
       if (referrer) {
         referrer.directReferrals.push(newUser._id);
         await referrer.save(); // Save the referrer to persist directReferrals update
       }
-
-
     }
 
     res.status(201).json({
@@ -145,11 +138,9 @@ exports.register = async (req, res) => {
     });
   } catch (error) {
     console.error("Registration error:", error);
-    res
-      .status(500)
-      .json({
-        message: "Server error during registration. Please try again later.",
-      });
+    res.status(500).json({
+      message: "Server error during registration. Please try again later.",
+    });
   }
 };
 
@@ -203,6 +194,8 @@ exports.login = async (req, res) => {
           _id: user._id,
           name: user.name, // Assuming 'name' is used as username
           email: user.email,
+          sponserdBy: user.sponserdBy, // Include sponserdBy
+          referredBy: user.referredBy, // Include referredBy
           currentLevel: user.currentLevel,
           walletBalance: user.walletBalance,
           referralCode: user.referralCode, // Include referral code
@@ -221,12 +214,10 @@ exports.changePassword = async (req, res) => {
   try {
     // Ensure req.user.id is populated by a preceding authentication middleware (like verifyToken)
     if (!req.user || !req.user.id) {
-      return res
-        .status(401)
-        .json({
-          success: false,
-          message: "Unauthorized: User not authenticated.",
-        });
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized: User not authenticated.",
+      });
     }
 
     const userDetails = await User.findById(req.user.id);
@@ -239,12 +230,10 @@ exports.changePassword = async (req, res) => {
     const { oldPassword, newPassword, confirmNewPassword } = req.body; // Added confirmNewPassword
 
     if (newPassword !== confirmNewPassword) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "New password and confirm new password do not match.",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "New password and confirm new password do not match.",
+      });
     }
 
     // Validate old password
