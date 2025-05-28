@@ -5,14 +5,47 @@ import Dashboard from "./Dashboard";
 import DashboardOverview from "./DashboardOverview";
 import Donation from "./Donation";
 import TransactionHistory from "./TransactionHistory";
-const Main = ({user}) => {
+const Main = ({ user }) => {
   return (
-    <div className="flex mx-auto flex-col ">
+    <div className="flex items-center justify-center mx-auto flex-col ">
       <Routes>
-        <Route path="/dashboardOverview" element={<DashboardOverview user={user} />} />
-        <Route path="/downline" element={<Dashboard user={user} matrixChildren={user.matrixChildren} />} />
-        <Route path="/donation" element={<Donation user={user} matrixChildren={user.matrixChildren} />} />
-        <Route path="/transactions" element={<TransactionHistory walletTransactions={user.walletTransactions} />} />
+        <Route
+          path="/"
+          element={
+            <div className="text-center text-2xl text-white  p-8 ">
+              <strong>
+                {" "}
+                Hii Welcome Back <br />
+                <h1 className="text-amber-400 text-7xl">{user.name} </h1>
+                <br />{" "}
+              </strong>
+              Check Out your Dashboard <br />
+              <h2 className="text-6xl">👈</h2>
+            </div>
+          }
+        />
+        <Route
+          path="/dashboardOverview"
+          element={<DashboardOverview user={user} />}
+        />
+        <Route
+          path="/downline"
+          element={
+            <Dashboard user={user} matrixChildren={user.matrixChildren} />
+          }
+        />
+        <Route
+          path="/donation"
+          element={
+            <Donation user={user} matrixChildren={user.matrixChildren} />
+          }
+        />
+        <Route
+          path="/transactions"
+          element={
+            <TransactionHistory walletTransactions={user.walletTransactions} />
+          }
+        />
       </Routes>
     </div>
   );

@@ -11,11 +11,11 @@ const Profile = () => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const { data } = await axios.get(
+          const  data  = await axios.get(
             `http://localhost:4001/api/v1/profile/getprofile/${userId}`
           );
-          
-          setUser(data.profile);
+          setUser(data.data.profile);
+        
         } catch (err) {
           console.error("Failed to fetch profile", err);
         }

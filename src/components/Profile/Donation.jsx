@@ -34,6 +34,14 @@ const Donation = ({user}) => {
         } else {
             setRazorpayLoading(false);
         }
+
+         // Cleanup function for the script if component unmounts (optional but good practice)
+        return () => {
+            const script = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
+            if (script) {
+                script.remove();
+            }
+        };
     }, []);
 
     // Function to initiate Razorpay payment
@@ -73,7 +81,7 @@ const Donation = ({user}) => {
             const { order } = data; // Get the order details from your backend
             // 2. Open Razorpay checkout
             const options = {
-                key: "rzp_test_t4LUM04KXw6wHc", // Your Razorpay Key ID
+                key: "rzp_test_5cal2pq9rBLw7n", // Your Razorpay Key ID
                 amount: order.amount, // Amount in paisa (Razorpay expects amount in smallest currency unit)
                 currency: order.currency,
                 name: 'Ladli Laxmi Trust',
