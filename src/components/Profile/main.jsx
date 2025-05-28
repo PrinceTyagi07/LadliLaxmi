@@ -13,7 +13,7 @@ const Main = ({user}) => {
         <Route path="/donation" element={<Donation user={user} matrixChildren={user.matrixChildren} />} />
         <Route path="/transactions" element={<TransactionHistory walletTransactions={user.walletTransactions} />} />
       </Routes>
-    </div>
+    
   );
 };
 
