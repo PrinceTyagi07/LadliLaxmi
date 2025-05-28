@@ -1,9 +1,35 @@
 // ===== controllers/profile.js =====
 const User = require("../models/User");
 
+// Recursive function to gather all matrix descendants
+const fetchMatrixDescendants = async (userId, visited = new Set()) => {
+  if (visited.has(userId.toString())) return [];
+
+  visited.add(userId.toString());
+
+  const user = await User.findById(userId)
+    .populate("matrixChildren", "name email referralCode currentLevel")
+    .lean();
+
+  const descendants = [];
+
+  for (const child of user?.matrixChildren || []) {
+    if (!descendants.find(u => u._id.toString() === child._id.toString())) {
+      descendants.push(child);
+    }
+    const childDescendants = await fetchMatrixDescendants(child._id, visited);
+    descendants.push(...childDescendants.filter(
+      u => !descendants.find(d => d._id.toString() === u._id.toString())
+    ));
+  }
+
+  return descendants;
+};
+
 exports.getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
+
     const user = await User.findById(userId)
       .populate("directReferrals", "name email")
       .populate("matrixChildren", "name email referralCode currentLevel")
@@ -13,6 +39,8 @@ exports.getProfile = async (req, res) => {
       .lean();
 
     if (!user) return res.status(404).json({ message: "User not found." });
+
+    const matrixDescendants = await fetchMatrixDescendants(user._id);
 
     const profile = {
       Id: user._id,
@@ -26,15 +54,15 @@ exports.getProfile = async (req, res) => {
       totalDonationsSent: user.donationsSent.length,
       totalDonationsReceived: user.donationsReceived.length,
       directReferrals: user.directReferrals,
-      matrixChildren: user.matrixChildren,
+      matrixChildren: matrixDescendants,
       bankDetails: user.bankDetails,
       createdAt: user.createdAt,
     };
 
-    return res.status(200).json({ profile });
+    res.status(200).json({ profile });
   } catch (error) {
     console.error("Error fetching profile:", error);
-    return res.status(500).json({ message: "Server error." });
+    res.status(500).json({ message: "Server error." });
   }
 };
 
