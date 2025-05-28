@@ -8,7 +8,9 @@ import DashboardOverview from "./DashboardOverview";
 const Main = ({user}) => {
   return (
     <div className="flex mr-10  flex-col ">
-      
+      {
+        console.log("matrixChildren",user.matrixChildren)
+      }
       <Routes>
         <Route path="/dashboardOverview" element={<DashboardOverview user={user} />} />
         <Route path="/downline" element={<Dashboard matrixChildren={user.matrixChildren} />} />
