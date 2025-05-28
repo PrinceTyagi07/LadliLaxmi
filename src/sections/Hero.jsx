@@ -1,6 +1,7 @@
 import React from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section id="home" className="relative w-full h-screen flex items-center justify-center bg-gray-600 text-white overflow-hidden">
       {/* Background overlay for text readability */}
@@ -14,21 +15,16 @@ const Hero = () => {
           Help today because tomorrow you may be the one who needs helping!
         </p>
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <button className="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+          <button onClick={() => navigate("/account")} className="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
             LOGIN
           </button>
-          <button className="px-8 py-3 bg-white hover:bg-gray-200 text-gray-900 font-bold rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
+          <button onClick={() => navigate("/account")} className="px-8 py-3 bg-white hover:bg-gray-200 text-gray-900 font-bold rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
             REGISTER
           </button>
         </div>
       </div>
 
-      {/* Placeholder for "Activate Windows" text, positioned at bottom right */}
-      <div className="absolute bottom-4 right-4 text-gray-300 text-sm">
-        Activate Windows
-        <br />
-        Go to Settings to activate Windows.
-      </div>
+      
     </section>
   );
 };

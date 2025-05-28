@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
 const registrationRoutes = require("./routes/registrationRoutes")
 // const upgradeRoutes = require('./routes/upgrade');
 // const adminRoutes = require('./routes/adminRoutes');
-// const donationRoutes = require('./routes/donationRoutes');
+const donationRoutes = require('./routes/donationRoutes');
 const profileRoute = require('./routes/ProfileRoute');
 // app.use('/api/admin', adminRoutes);
 // Setting up routes
@@ -42,7 +42,7 @@ app.use("/api/v1/auth", registrationRoutes);
 
 // app.use('/api/upgrade', upgradeRoutes);
 
-// app.use("/api/donations/", donationRoutes);
+app.use("/api/v1/donations", donationRoutes);
 app.use("/api/v1/profile", profileRoute);
 
 app.get("/test", (req, res) => {

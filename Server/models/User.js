@@ -103,7 +103,9 @@ const userSchema = new mongoose.Schema(
       isActive: {
          type: Boolean,
          default: true
-      },
+      },token: {
+      type: String,
+    },
 
       lastLogin: Date,
 

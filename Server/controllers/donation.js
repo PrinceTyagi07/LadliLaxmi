@@ -11,13 +11,14 @@ const crypto = require("crypto"); // Added for signature verification
 // Create Razorpay Order API
 // router.post("/create-order", async (req, res) => {
 exports.capturePayment = async (req, res) => {
-  const { userId, level } = req.body;
+  const { userId, currentLevel } = req.body;
 
   try {
     // Validate input
-    if (!userId || !level) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+    console.log(userId +" -- " +currentLevel)
+    // if (!userId || !currentLevel) {
+    //   return res.status(400).json({ message: "Missing required fields" });
+    // }
 
     const donor = await User.findById(userId);
     if (!donor) {
@@ -38,7 +39,7 @@ exports.capturePayment = async (req, res) => {
       payment_capture: 1, // Auto-capture payment
       notes: {
         userId: userId.toString(),
-        level: level.toString(),
+        currentLevel: currentLevel.toString(),
         receiverId: receiver._id.toString(),
       },
     };
@@ -47,7 +48,7 @@ exports.capturePayment = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: order,
+      order,
     });
   } catch (err) {
     console.error("Razorpay order error:", err);
@@ -83,7 +84,7 @@ exports.verifyPayment =  async (req, res) => {
 
     // Get order details from Razorpay
     const order = await razorpayinstance.orders.fetch(razorpay_order_id);
-    const { userId, level, receiverId } = order.notes;
+    const { userId, currentLevel, receiverId } = order.notes;
 
     const donor = await User.findById(userId).select(
       "+walletBalance +walletTransactions"
@@ -108,7 +109,7 @@ exports.verifyPayment =  async (req, res) => {
       donor: donor._id,
       receiver: receiver._id,
       amount,
-      level,
+      currentLevel,
       status: "completed",
       transactionId,
       paymentId: razorpay_payment_id,
@@ -128,11 +129,11 @@ exports.verifyPayment =  async (req, res) => {
         amount: amount,
         type: "donation_received",
         status: "completed",
-        donationLevel: level,
+        donationLevel: currentLevel,
         fromUser: donor._id,
         referenceId: donation._id,
         transactionId: donation.transactionId,
-        description: `Donation from ${donor.name} (Level ${level}) via Razorpay`,
+        description: `Donation from ${donor.name} (Level ${currentLevel}) via Razorpay`,
         processedAt: new Date(),
       });
 
@@ -141,10 +142,10 @@ exports.verifyPayment =  async (req, res) => {
         amount: -amount,
         type: "donation_sent",
         status: "completed",
-        donationLevel: level,
+        donationLevel: currentLevel,
         referenceId: donation._id,
         transactionId,
-        description: `Donation to ${receiver.name} (Level ${level}) via Razorpay`,
+        description: `Donation to ${receiver.name} (currentLevel ${currentLevel}) via Razorpay`,
         processedAt: new Date(),
       });
 
@@ -180,295 +181,3 @@ exports.verifyPayment =  async (req, res) => {
 // - Getting donation history
 // - Admin dashboard stats
 // ADMIN DASHBOARD STATISTICS ENDPOINTS
-
-// Get summary statistics
-router.get("/admin/stats", async (req, res) => {
-  try {
-    // Verify admin
-    const admin = await User.findById(req.user.id);
-    if (!admin || admin.role !== "admin") {
-      return res.status(403).json({ message: "Unauthorized access" });
-    }
-
-    // Get all time stats
-    const [
-      totalDonations,
-      pendingDonations,
-      completedDonations,
-      totalAmount,
-      usersCount,
-    ] = await Promise.all([
-      Donation.countDocuments(),
-      Donation.countDocuments({ status: "pending" }),
-      Donation.countDocuments({ status: "approved" }),
-      Donation.aggregate([
-        { $match: { status: "approved" } },
-        { $group: { _id: null, total: { $sum: "$amount" } } },
-      ]),
-      User.countDocuments(),
-    ]);
-
-    // Get today's stats
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
-
-    const [todayDonations, todayAmount] = await Promise.all([
-      Donation.countDocuments({ createdAt: { $gte: todayStart } }),
-      Donation.aggregate([
-        {
-          $match: {
-            status: "approved",
-            approvedAt: { $gte: todayStart },
-          },
-        },
-        { $group: { _id: null, total: { $sum: "$amount" } } },
-      ]),
-    ]);
-
-    // Get recent donations
-    const recentDonations = await Donation.find()
-      .sort({ createdAt: -1 })
-      .limit(5)
-      .populate("donor", "name email")
-      .populate("receiver", "name email")
-      .lean();
-
-    res.json({
-      success: true,
-      stats: {
-        totals: {
-          donations: totalDonations,
-          pending: pendingDonations,
-          completed: completedDonations,
-          amount: totalAmount[0]?.total || 0,
-          users: usersCount,
-        },
-        today: {
-          donations: todayDonations,
-          amount: todayAmount[0]?.total || 0,
-        },
-        recentDonations,
-      },
-    });
-  } catch (err) {
-    console.error("Admin stats error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to get admin statistics",
-      error: err.message,
-    });
-  }
-});
-
-// Get donations with filtering and pagination
-router.get("/admin/donations", async (req, res) => {
-  try {
-    // Verify admin
-    const admin = await User.findById(req.user.id);
-    if (!admin || admin.role !== "admin") {
-      return res.status(403).json({ message: "Unauthorized access" });
-    }
-
-    // Parse query params
-    const {
-      status,
-      level,
-      startDate,
-      endDate,
-      page = 1,
-      limit = 20,
-    } = req.query;
-
-    // Build filter
-    const filter = {};
-    if (status) filter.status = status;
-    if (level) filter.level = level;
-    if (startDate || endDate) {
-      filter.createdAt = {};
-      if (startDate) filter.createdAt.$gte = new Date(startDate);
-      if (endDate) filter.createdAt.$lte = new Date(endDate);
-    }
-
-    // Get paginated donations
-    const [donations, total] = await Promise.all([
-      Donation.find(filter)
-        .sort({ createdAt: -1 })
-        .skip((page - 1) * limit)
-        .limit(parseInt(limit))
-        .populate("donor", "name email referralCode")
-        .populate("receiver", "name email referralCode")
-        .lean(),
-      Donation.countDocuments(filter),
-    ]);
-
-    res.json({
-      success: true,
-      donations,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total,
-        pages: Math.ceil(total / limit),
-      },
-    });
-  } catch (err) {
-    console.error("Admin donations error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to get donations",
-      error: err.message,
-    });
-  }
-});
-
-// Get user donation history
-router.get("/admin/user/:userId/donations", async (req, res) => {
-  try {
-    // Verify admin
-    const admin = await User.findById(req.user.id);
-    if (!admin || admin.role !== "admin") {
-      return res.status(403).json({ message: "Unauthorized access" });
-    }
-
-    const { userId } = req.params;
-    const { type = "all", limit = 20 } = req.query;
-
-    // Build filter
-    const filter = {};
-    if (type === "sent") {
-      filter.donor = userId;
-    } else if (type === "received") {
-      filter.receiver = userId;
-    } else {
-      $or = [{ donor: userId }, { receiver: userId }];
-    }
-
-    const donations = await Donation.find(filter)
-      .sort({ createdAt: -1 })
-      .limit(parseInt(limit))
-      .populate(type === "sent" ? "receiver" : "donor", "name email")
-      .lean();
-
-    res.json({
-      success: true,
-      donations,
-    });
-  } catch (err) {
-    console.error("User donations error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to get user donations",
-      error: err.message,
-    });
-  }
-});
-
-// Get financial summary
-router.get("/admin/financial-summary", async (req, res) => {
-  try {
-    // Verify admin
-    const admin = await User.findById(req.user.id);
-    if (!admin || admin.role !== "admin") {
-      return res.status(403).json({ message: "Unauthorized access" });
-    }
-
-    // Get date ranges
-    const now = new Date();
-    const todayStart = new Date(now.setHours(0, 0, 0, 0));
-    const weekStart = new Date(now.setDate(now.getDate() - 7));
-    const monthStart = new Date(now.setMonth(now.getMonth() - 1));
-    const yearStart = new Date(now.setFullYear(now.getFullYear() - 1));
-
-    // Get all time stats
-    const [totalStats, todayStats, weeklyStats, monthlyStats, yearlyStats] =
-      await Promise.all([
-        Donation.aggregate([
-          { $match: { status: "approved" } },
-          {
-            $group: {
-              _id: null,
-              totalAmount: { $sum: "$amount" },
-              count: { $sum: 1 },
-              avgAmount: { $avg: "$amount" },
-            },
-          },
-        ]),
-        Donation.aggregate([
-          { $match: { status: "approved", approvedAt: { $gte: todayStart } } },
-          {
-            $group: {
-              _id: null,
-              totalAmount: { $sum: "$amount" },
-              count: { $sum: 1 },
-            },
-          },
-        ]),
-        Donation.aggregate([
-          { $match: { status: "approved", approvedAt: { $gte: weekStart } } },
-          {
-            $group: {
-              _id: null,
-              totalAmount: { $sum: "$amount" },
-              count: { $sum: 1 },
-            },
-          },
-        ]),
-        Donation.aggregate([
-          { $match: { status: "approved", approvedAt: { $gte: monthStart } } },
-          {
-            $group: {
-              _id: null,
-              totalAmount: { $sum: "$amount" },
-              count: { $sum: 1 },
-            },
-          },
-        ]),
-        Donation.aggregate([
-          { $match: { status: "approved", approvedAt: { $gte: yearStart } } },
-          {
-            $group: {
-              _id: null,
-              totalAmount: { $sum: "$amount" },
-              count: { $sum: 1 },
-            },
-          },
-        ]),
-      ]);
-
-    res.json({
-      success: true,
-      summary: {
-        allTime: {
-          totalAmount: totalStats[0]?.totalAmount || 0,
-          count: totalStats[0]?.count || 0,
-          avgAmount: totalStats[0]?.avgAmount || 0,
-        },
-        today: {
-          totalAmount: todayStats[0]?.totalAmount || 0,
-          count: todayStats[0]?.count || 0,
-        },
-        last7Days: {
-          totalAmount: weeklyStats[0]?.totalAmount || 0,
-          count: weeklyStats[0]?.count || 0,
-        },
-        last30Days: {
-          totalAmount: monthlyStats[0]?.totalAmount || 0,
-          count: monthlyStats[0]?.count || 0,
-        },
-        last365Days: {
-          totalAmount: yearlyStats[0]?.totalAmount || 0,
-          count: yearlyStats[0]?.count || 0,
-        },
-      },
-    });
-  } catch (err) {
-    console.error("Financial summary error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to get financial summary",
-      error: err.message,
-    });
-  }
-});
-
-module.exports = router;
