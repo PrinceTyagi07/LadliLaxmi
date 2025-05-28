@@ -59,8 +59,9 @@ const Donation = ({user}) => {
             };
             const { data } = await axios.post(
                 `http://localhost:4001/api/v1/donations/create-order`, // Your backend endpoint
-                { amount: amountToPay, userId: user.Id, currentLevel: user.currentLevel }, // Send required data to backend
+                { userId: user.Id, currentLevel: user.currentLevel }, // Send required data to backend
                 config
+                // { amount: amountToPay, userId: user.Id, currentLevel: user.currentLevel }, // Send required data to backend
             );
 
             if (!data.success) {
@@ -72,7 +73,7 @@ const Donation = ({user}) => {
             const { order } = data; // Get the order details from your backend
             // 2. Open Razorpay checkout
             const options = {
-                key: rzp_test_t4LUM04KXw6wHc, // Your Razorpay Key ID
+                key: "rzp_test_t4LUM04KXw6wHc", // Your Razorpay Key ID
                 amount: order.amount, // Amount in paisa (Razorpay expects amount in smallest currency unit)
                 currency: order.currency,
                 name: 'Ladli Laxmi Trust',

@@ -16,9 +16,9 @@ exports.capturePayment = async (req, res) => {
   try {
     // Validate input
     console.log(userId +" -- " +currentLevel)
-    if (!userId || !currentLevel) {
-      return res.status(400).json({ message: "Missing required fields" });
-    }
+    // if (!userId || !currentLevel) {
+    //   return res.status(400).json({ message: "Missing required fields" });
+    // }
 
     const donor = await User.findById(userId);
     if (!donor) {
@@ -48,7 +48,7 @@ exports.capturePayment = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      data: order,
+      order,
     });
   } catch (err) {
     console.error("Razorpay order error:", err);
@@ -142,7 +142,7 @@ exports.verifyPayment =  async (req, res) => {
         amount: -amount,
         type: "donation_sent",
         status: "completed",
-        donationLevel: level,
+        donationLevel: currentLevel,
         referenceId: donation._id,
         transactionId,
         description: `Donation to ${receiver.name} (currentLevel ${currentLevel}) via Razorpay`,
