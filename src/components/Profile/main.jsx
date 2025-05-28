@@ -7,7 +7,6 @@ import Donation from "./Donation";
 import TransactionHistory from "./TransactionHistory";
 const Main = ({user}) => {
   return (
-    <div className="flex mx-auto flex-col ">
       <Routes>
         <Route path="/dashboardOverview" element={<DashboardOverview user={user} />} />
         <Route path="/downline" element={<Dashboard user={user} matrixChildren={user.matrixChildren} />} />
