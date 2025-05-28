@@ -5,25 +5,14 @@ import Dashboard from "./Dashboard";
 import DashboardOverview from "./DashboardOverview";
 import Donation from "./Donation";
 import TransactionHistory from "./TransactionHistory";
-import { useLocation } from "react-router-dom";
-
-
 const Main = ({user}) => {
   return (
-    <div className="flex mr-10  flex-col ">
-      {
-        console.log("matrixChildren",user.matrixChildren)
-      }
       <Routes>
         <Route path="/dashboardOverview" element={<DashboardOverview user={user} />} />
         <Route path="/downline" element={<Dashboard user={user} matrixChildren={user.matrixChildren} />} />
-        {/* <Route path="/upgrade/:level" element={<Dashboard user={user} matrixChildren={user.matrixChildren} />} /> */}
         <Route path="/donation" element={<Donation user={user} matrixChildren={user.matrixChildren} />} />
         <Route path="/transactions" element={<TransactionHistory walletTransactions={user.walletTransactions} />} />
       </Routes>
-      {/* <DashboardOverview user={user} />
-      <Dashboard matrixChildren={user.matrixChildren} /> */}
-
     </div>
   );
 };
