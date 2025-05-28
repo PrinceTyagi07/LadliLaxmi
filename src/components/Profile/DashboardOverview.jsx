@@ -33,6 +33,12 @@ console.log(user)
       color: "blue",
     },
     {
+      title: "Matrix Members",
+      value: user.matrixChildren?.length ?? 0,
+
+      color: "green",
+    },
+    {
       title: "Total Donations Received",
       value: user.totalDonationsReceived ?? 0,
       color: "amber",

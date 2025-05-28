@@ -1,7 +1,7 @@
 // Logout.js (Separate Component)
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -20,9 +20,11 @@ const Logout = () => {
 
         // Remove token from local storage
         localStorage.removeItem("token");
-
+        localStorage.removeItem("userId");
+        localStorage.removeItem("user");
         // Redirect to home page after logout
         navigate("/");
+        window.location.reload();
 
         console.log("Logout successful");
       } else {

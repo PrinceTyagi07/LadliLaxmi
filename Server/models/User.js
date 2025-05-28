@@ -46,6 +46,13 @@ const userSchema = new mongoose.Schema(
          type: String,
       },
 
+      // kis bande ne ise refer code diya h signup k liye 
+      sponserdBy: {
+         type: String,
+         default: "Admin"
+      },
+
+      // tree of 2
       matrixChildren: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "User"
@@ -77,6 +84,7 @@ const userSchema = new mongoose.Schema(
          ref: "WalletTransaction"
       }],
 
+      // no. of people to whome it referes
       directReferrals: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "User"

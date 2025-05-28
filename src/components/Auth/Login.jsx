@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // import { useAuth } from "../../context/AuthContext"; // Uncomment if you have an AuthContext
 import { useNavigate } from "react-router-dom";
 
@@ -15,15 +15,12 @@ const Login = () => {
 
   // const { login } = useAuth(); // Uncomment if you have an AuthContext
   const navigate = useNavigate();
-
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
-  };
-
-  // Handle input changes
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   // Handle form submission
@@ -51,10 +48,8 @@ const Login = () => {
         localStorage.setItem("userId", user._id);
         localStorage.setItem("user", JSON.stringify(user));
 
-        // If you have an AuthContext, you might call login(response.data) here
-        // login(response.data); 
-
-        navigate("/account"); // Navigate to the home page or dashboard
+        // navigate("/account"); // Navigate to the home page or dashboard
+        navigate("/userdashboard"); // Navigate to the home page or dashboard
       } else {
         // Login failed
         setError(response.data.message || "Invalid email or password.");
@@ -62,7 +57,11 @@ const Login = () => {
     } catch (error) {
       console.error("Error during login ", error);
       // Check for a specific error message from the backend if available
-      if (error.response && error.response.data && error.response.data.message) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         setError(error.response.data.message);
       } else {
         setError("An unexpected error occurred. Please try again.");

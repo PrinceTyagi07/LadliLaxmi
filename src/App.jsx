@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-// Import 'Navigate' component for declarative redirects (like <Navigate to="/"/>)
-// Import 'useNavigate' hook for programmatic redirects within components (like in PrivateRoute)
 import {
   BrowserRouter as Router,
   Routes,
@@ -8,6 +6,10 @@ import {
   Navigate,
   useNavigate,
 } from "react-router-dom";
+
+
+
+
 import { useSyncExternalStore } from "react";
 import { jwtDecode } from "jwt-decode"; // Import jwtDecode for decoding JWTs (make sure you've installed it)
 
@@ -17,10 +19,16 @@ import Footer from "./components/Footer";
 import Home from "./Pages/Home";
 import Registration from "./Pages/Registration";
 import Profile from "./Pages/Profile";
-import UserDashboard from "./components/Profile/userDashboard"; // Import the UserDashboard component
+
+// Inline PrivateRoute component
+const PrivateRoute = ({ children }) => {
+  const token = localStorage.getItem("token");
+  return token ? children : <Navigate to="/account" replace />;
+};
 
 // --- App Component ---
 function App() {
+  
   let email = ""; // Variable to hold the decoded email from the token
 
   // useSyncExternalStore is used here to get the 'token' from localStorage,
@@ -59,17 +67,18 @@ function App() {
         {/* Public Route for Home page */}
         <Route path="/" element={<Home />} />
 
-        {/* Conditional Route for Account page:
-              Shows Profile if userToken exists, otherwise shows Registration. */}
         <Route
           path="/account/*"
-          element={userToken ? <Profile /> : <Registration />}
+          element={<Registration />}
         />
-        {/* Protected Dashboard Routes - UserDashboard component will handle authentication check internally */}
-        {/* The '*' in path="/dashboard/*" allows UserDashboard to handle nested routes like /dashboard/profile, /dashboard/transactions etc. */}
-        <Route path="/userdashboard/*" element={<UserDashboard />} />
-        {/* Protected Admin Routes using PrivateRoute */}
-        {/* Note: PrivateRoute wraps the component in the 'element' prop of the Route */}
+        <Route
+          path="/userdashboard/*"
+          element={
+            <PrivateRoute>
+              <Profile />
+            </PrivateRoute>
+          }
+        />
 
         {/* Fallback Route: For any unmatched paths, redirect to the Home page.
               This uses the 'Navigate' component for declarative redirection. */}

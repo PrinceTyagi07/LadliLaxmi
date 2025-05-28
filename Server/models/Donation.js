@@ -18,10 +18,10 @@ const donationSchema = new mongoose.Schema(
        required: true,
        min: 0 },
 
-    level: {
+    currentLevel: {
        type: Number,
        required: true,
-       min: 1 },
+       min: 0 },
 
     status: {
        type: String,

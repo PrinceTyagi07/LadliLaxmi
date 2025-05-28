@@ -1,4 +1,3 @@
-
 const express = require("express");
 const Donation = require("../models/Donation");
 const User = require("../models/User");
@@ -15,7 +14,7 @@ exports.capturePayment = async (req, res) => {
 
   try {
     // Validate input
-    console.log(userId +" -- " +currentLevel)
+    console.log(userId + " -- " + currentLevel);
     // if (!userId || !currentLevel) {
     //   return res.status(400).json({ message: "Missing required fields" });
     // }
@@ -30,8 +29,10 @@ exports.capturePayment = async (req, res) => {
       return res.status(404).json({ message: "Upline not found" });
     }
 
+    const sponser = await User.findOne({ referralCode: donor.sponserdBy });
+
     // Create Razorpay order
-    const amount = 300 * 100; // 300 rupees in paise
+    const amount = 400 * 100; // 400 rupees in paise
     const options = {
       amount: amount.toString(),
       currency: "INR",
@@ -41,6 +42,7 @@ exports.capturePayment = async (req, res) => {
         userId: userId.toString(),
         currentLevel: currentLevel.toString(),
         receiverId: receiver._id.toString(),
+        sponserId:  sponser._id.toString()
       },
     };
 
@@ -62,13 +64,16 @@ exports.capturePayment = async (req, res) => {
 
 // Razorpay Webhook Handler (for payment verification)
 // router.post("/verify-payment", async (req, res) => {
-exports.verifyPayment =  async (req, res) => {
+exports.verifyPayment = async (req, res) => {
   const razorpay_order_id = req.body?.razorpay_order_id;
   const razorpay_payment_id = req.body?.razorpay_payment_id;
   const razorpay_signature = req.body?.razorpay_signature;
+  const { userId, currentLevel } = req.body;
 
   if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
-    return res.status(400).json({ success: false, message: "Payment Failed - Missing parameters" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Payment Failed - Missing parameters" });
   }
 
   try {
@@ -84,7 +89,7 @@ exports.verifyPayment =  async (req, res) => {
 
     // Get order details from Razorpay
     const order = await razorpayinstance.orders.fetch(razorpay_order_id);
-    const { userId, currentLevel, receiverId } = order.notes;
+    const { userId, currentLevel, receiverId, sponserId } = order.notes;
 
     const donor = await User.findById(userId).select(
       "+walletBalance +walletTransactions"
@@ -92,14 +97,18 @@ exports.verifyPayment =  async (req, res) => {
     const receiver = await User.findById(receiverId).select(
       "+walletBalance +walletTransactions"
     );
+    const sponser = await User.findById(sponserId).select(
+      "+walletBalance +walletTransactions"
+    );
 
-    if (!donor || !receiver) {
+    if (!donor || !receiver || !sponser) {
       return res.status(404).json({ message: "User not found" });
     }
 
     // Initialize wallets if not already activated
     if (donor.walletBalance === undefined) donor.walletBalance = 0;
     if (receiver.walletBalance === undefined) receiver.walletBalance = 0;
+    if (sponser.walletBalance === undefined) sponser.walletBalance = 0;
 
     const amount = order.amount / 100; // Convert back to rupees
     const transactionId = uuidv4();
@@ -124,7 +133,8 @@ exports.verifyPayment =  async (req, res) => {
       await donation.save({ session });
 
       // Update receiver's wallet (donor's wallet remains unchanged as payment was external)
-      receiver.walletBalance += amount;
+      // receiver.walletBalance = receiver.walletBalance + amount - 50;
+      receiver.walletBalance = receiver.walletBalance + amount - 100;
       receiver.walletTransactions.push({
         amount: amount,
         type: "donation_received",
@@ -134,6 +144,20 @@ exports.verifyPayment =  async (req, res) => {
         referenceId: donation._id,
         transactionId: donation.transactionId,
         description: `Donation from ${donor.name} (Level ${currentLevel}) via Razorpay`,
+        processedAt: new Date(),
+      });
+
+      // Update sponser's wallet (sponser's wallet add 50 rupees)
+      sponser.walletBalance = 100;
+      sponser.walletTransactions.push({
+        amount: 100,
+        type: "sponser_payment",
+        status: "completed",
+        donationLevel: currentLevel,
+        fromUser: donor._id,
+        referenceId: donation._id,
+        transactionId: donation.transactionId,
+        description: `Sponser donation from ${donor.name} (Level ${currentLevel}) via Razorpay`,
         processedAt: new Date(),
       });
 
@@ -151,9 +175,12 @@ exports.verifyPayment =  async (req, res) => {
 
       // Update user donation references
       donor.donationsSent.push(donation._id);
+      donor.currentLevel += 1; // Update donor's current level
       receiver.donationsReceived.push(donation._id);
 
       await donor.save({ session });
+      await sponser.save({ session });
+
       await receiver.save({ session });
       await session.commitTransaction();
 
