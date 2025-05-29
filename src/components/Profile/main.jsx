@@ -7,7 +7,9 @@ import Donation from "./Donation";
 import TransactionHistory from "./TransactionHistory";
 const Main = ({ user }) => {
   return (
+
     <div className="flex items-center justify-center mx-auto flex-col ">
+
       <Routes>
         <Route
           path="/"

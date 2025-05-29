@@ -6,11 +6,7 @@ const buildMatrixHierarchy = async (userId, visited = new Set(), depth = 0, maxD
   visited.add(userId.toString());
 
   const user = await User.findById(userId)
-    .populate({
-      path: 'matrixChildren',
-      select: 'name _id email referralCode currentLevel',
-      options: { sort: { createdAt: 1 } }
-    })
+    .populate("matrixChildren", "name email referralCode currentLevel")
     .lean();
 
   if (!user) return null;
@@ -34,9 +30,12 @@ exports.getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    // Get the root user by ID only
     const rootUser = await User.findById(userId)
-      .populate('referredBy', 'email _id name')
+      .populate("directReferrals", "name email")
+      .populate("matrixChildren", "name email referralCode currentLevel")
+      .populate("donationsSent")
+      .populate("donationsReceived")
+      .populate("walletTransactions")
       .lean();
 
     if (!rootUser) {

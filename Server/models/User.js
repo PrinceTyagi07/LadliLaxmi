@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema(
 
       referredBy: {
          type: String,
+         
       },
 
       // kis bande ne ise refer code diya h signup k liye 

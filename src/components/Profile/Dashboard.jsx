@@ -26,7 +26,7 @@ const TreeNode = ({ user, isLast = false, parentHasSiblings = false }) => {
       )}
 
       {/* Node content */}
-      <div className={`${bgColor} p-3 rounded-lg border-2 text-center mb-2 w-48 relative z-10 shadow-sm`}>
+      <div className={`${bgColor} p-3 rounded-lg border-2 text-center mb-2 w-48 relative z-10 shadow-sm border-red-400 `}>
         <div className="font-bold truncate">{user.name}</div>
         <div className="text-xs">ID: {user.referralCode || user._id || "N/A"}</div>
         <div className="text-sm">Level: {currentLevel}</div>
@@ -34,19 +34,20 @@ const TreeNode = ({ user, isLast = false, parentHasSiblings = false }) => {
 
       {/* Children container */}
       {user.matrixChildren?.length > 0 && (
-        <div className="relative flex justify-center">
+        <div className="relative flex justify-center  ">
           {/* Horizontal connector line */}
           <div className="absolute top-0 left-0 right-0 flex justify-center">
-            <div className="h-0.5 bg-gray-400" style={{ 
-              width: `${100 - (100 / (user.matrixChildren.length + 1))}%` 
+            <div className="h-0.5 bg-gray-400 w-[40vw]" style={{ 
+              // width: `${100 - (100 / (user.matrixChildren.length + 1))}%` 
+              
             }}></div>
           </div>
           
-          <div className="flex flex-row flex-wrap justify-center gap-4 pt-6">
+          <div className="flex flex-row flex-wrap justify-center  gap-4 pt-6 ">
             {user.matrixChildren.map((child, index) => (
               <React.Fragment key={child._id || index}>
                 {/* Vertical connector to each child */}
-                <div className="absolute top-0 h-6 w-0.5 bg-gray-400" style={{
+                <div className="absolute top-0 h-6 w-0.5 bg-gray-400 border-amber-300 border-2 " style={{
                   left: `${(index + 0.5) * (100 / user.matrixChildren.length)}%`,
                   transform: 'translateX(-50%)'
                 }}></div>
@@ -70,24 +71,25 @@ const MemoizedTreeNode = React.memo(TreeNode);
 
 const Dashboard = ({ user }) => {
   return (
-    <div className="p-6 bg-white text-black shadow-lg rounded-lg mt-8 overflow-x-auto">
+    <div className="p-6 bg-white text-black shadow-lg rounded-lg mt-8 overflow-x-hidden w-[80vw] justify-center flex flex-col">
       <h2 className="text-3xl font-bold text-center mb-6 text-blue-700">
         Matrix Network
       </h2>
 
-      <div className="flex justify-center">
-        {user ? (
-          <div className="relative">
-            <MemoizedTreeNode user={user} />
-            {/* Legend for levels */}
-            <div className="mt-8 flex justify-center gap-4 flex-wrap">
-              {levelColors.map((color, level) => (
-                <div key={level} className={`${color} px-3 py-1 rounded-full text-xs border`}>
-                  Level {level}
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="bg-blue-100 self-center border-red-600  border-2 w-fit p-4 rounded-md shadow text-center mb-4">
+        <div className="font-semibold text-lg">{user.name}</div>
+        <div className="text-sm text-gray-600">{user.email}</div>
+        <div className="text-sm text-gray-600">
+          Code: {user.referralCode}
+          <span className="ml-4">Level: {user.currentLevel}</span>
+        </div>
+      </div>
+
+      <div className="flex justify-center   gap-4">
+        {user.matrixChildren?.length > 0 ? (
+          user.matrixChildren.map((child, index) => (
+            <TreeNode key={child._id || index} user={child} />
+          ))
         ) : (
           <div className="text-gray-500 text-center py-12">Loading user data...</div>
         )}
