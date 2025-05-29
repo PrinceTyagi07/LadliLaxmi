@@ -1,69 +1,78 @@
-// ===== controllers/profile.js =====
 const User = require("../models/User");
 
-// Recursive function to gather all matrix descendants
-const fetchMatrixDescendants = async (userId, visited = new Set()) => {
-  if (visited.has(userId.toString())) return [];
+const buildMatrixHierarchy = async (userId, visited = new Set(), depth = 0, maxDepth = 5) => {
+  if (visited.has(userId.toString()) || depth > maxDepth) return null;
 
   visited.add(userId.toString());
 
   const user = await User.findById(userId)
-    .populate("matrixChildren", "name email referralCode currentLevel")
+    .populate({
+      path: 'matrixChildren',
+      select: 'name _id email referralCode currentLevel',
+      options: { sort: { createdAt: 1 } }
+    })
     .lean();
 
-  const descendants = [];
+  if (!user) return null;
 
-  for (const child of user?.matrixChildren || []) {
-    if (!descendants.find(u => u._id.toString() === child._id.toString())) {
-      descendants.push(child);
+  const node = {
+    ...user,
+    matrixChildren: []
+  };
+
+  for (const child of user.matrixChildren || []) {
+    const childNode = await buildMatrixHierarchy(child._id, visited, depth + 1, maxDepth);
+    if (childNode) {
+      node.matrixChildren.push(childNode);
     }
-    const childDescendants = await fetchMatrixDescendants(child._id, visited);
-    descendants.push(...childDescendants.filter(
-      u => !descendants.find(d => d._id.toString() === u._id.toString())
-    ));
   }
 
-  return descendants;
+  return node;
 };
 
 exports.getProfile = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    const user = await User.findById(userId)
-      .populate("directReferrals", "name email")
-      .populate("matrixChildren", "name email referralCode currentLevel")
-      .populate("donationsSent")
-      .populate("donationsReceived")
-      .populate("walletTransactions")
+    // Get the root user by ID only
+    const rootUser = await User.findById(userId)
+      .populate('referredBy', 'email _id name')
       .lean();
 
-    if (!user) return res.status(404).json({ message: "User not found." });
+    if (!rootUser) {
+      return res.status(404).json({ message: "User not found." });
+    }
 
-    const matrixDescendants = await fetchMatrixDescendants(user._id);
+    // let hierarchyRoot;
+    // if (rootUser.referredBy) {
+    //   // Find the topmost parent (user with no referrer)
+    //   let topParent = rootUser;
+    //   while (topParent.referredBy) {
+    //     topParent = await User.findOne({ referralCode: topParent.referredBy })
+    //         .populate('referredBy', '_id referralCode')
+    //         .lean();
+    //   }
+    //   hierarchyRoot = await buildMatrixHierarchy(topParent._id);
+    // } else {
+    //   // Current user is the top of hierarchy
+    //   hierarchyRoot = await buildMatrixHierarchy(userId);
+    // }
+    const hierarchyRoot = await buildMatrixHierarchy(userId);
+    if (!hierarchyRoot) {
+      return res.status(404).json({ message: "Hierarchy data not available." });
+    }
 
-    const profile = {
-      Id: user._id,
-      name: user.name,
-      email: user.email,
-      phone: user.phone,
-      referralCode: user.referralCode,
-      referredBy: user.referredBy,
-      currentLevel: user.currentLevel,
-      walletBalance: user.walletBalance,
-      totalDonationsSent: user.donationsSent.length,
-      totalDonationsReceived: user.donationsReceived.length,
-      directReferrals: user.directReferrals,
-      matrixChildren: matrixDescendants,
-      bankDetails: user.bankDetails,
-      createdAt: user.createdAt,
-    };
-
-    res.status(200).json({ profile });
+    res.status(200).json({ profile: hierarchyRoot });
   } catch (error) {
     console.error("Error fetching profile:", error);
+    
+    // More specific error message for invalid ID format
+    if (error.name === 'CastError') {
+      return res.status(400).json({ 
+        message: "Invalid user ID format. Please provide a valid MongoDB ObjectId." 
+      });
+    }
+    
     res.status(500).json({ message: "Server error." });
   }
 };
-
-

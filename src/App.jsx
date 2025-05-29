@@ -7,9 +7,6 @@ import {
   useNavigate,
 } from "react-router-dom";
 
-
-
-
 import { useSyncExternalStore } from "react";
 import { jwtDecode } from "jwt-decode"; // Import jwtDecode for decoding JWTs (make sure you've installed it)
 
