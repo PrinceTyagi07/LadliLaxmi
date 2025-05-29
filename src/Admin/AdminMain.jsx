@@ -13,7 +13,7 @@ function AdminLayout({ children }) {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1 p-4 bg-gray-100 min-h-screen">{children}</div>
+      <div className="flex-1 p-4 min-h-screen">{children}</div>
     </div>
   );
 }
@@ -30,11 +30,11 @@ const AdminMain = () =>  {
 
         {isAdmin ? (
           <>
-            <Route path="/admin/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
-            <Route path="/admin/users" element={<AdminLayout><Users /></AdminLayout>} />
-            <Route path="/admin/payments" element={<AdminLayout><Payments /></AdminLayout>} />
-            <Route path="/admin/withdraws" element={<AdminLayout><Withdraws /></AdminLayout>} />
-            <Route path="/admin/reports" element={<AdminLayout><Reports /></AdminLayout>} />
+            <Route path="/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
+            <Route path="/users" element={<AdminLayout><Users /></AdminLayout>} />
+            <Route path="/payments" element={<AdminLayout><Payments /></AdminLayout>} />
+            <Route path="/withdraws" element={<AdminLayout><Withdraws /></AdminLayout>} />
+            <Route path="/reports" element={<AdminLayout><Reports /></AdminLayout>} />
           </>
         ) : (
           <Route path="*" element={<Navigate to="/admin/login" />} />

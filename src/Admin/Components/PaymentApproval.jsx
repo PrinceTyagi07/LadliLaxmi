@@ -6,7 +6,7 @@ export default function PaymentApproval({ payments, onApprove, onReject }) {
   return (
     <div>
       {payments.map((payment) => (
-        <div key={payment._id} className="bg-white p-4 rounded shadow mb-4 border border-gray-200">
+        <div key={payment._id} className="bg-[#141628] p-4 rounded shadow mb-4 border border-gray-200">
           <p><strong>User:</strong> {payment.user}</p>
           <p><strong>Amount:</strong> ₹{payment.amount}</p>
           <p><strong>Bank Name:</strong> {payment.bankName}</p>

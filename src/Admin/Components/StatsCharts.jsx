@@ -94,7 +94,7 @@ export default function StatsCharts({ stats, type }) {
                 };
 
                 return (
-                    <PieChart>
+                    <PieChart  className="" >
                         <Pie
                             data={stats}
                             dataKey="value"
@@ -115,7 +115,7 @@ export default function StatsCharts({ stats, type }) {
     };
 
     return (
-        <div className="p-4 bg-white rounded shadow">
+        <div className="p-4 bg-white rounded shadow ">
             <ResponsiveContainer width="100%" height={300}>
                 {renderChart()}
             </ResponsiveContainer>

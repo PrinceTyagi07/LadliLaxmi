@@ -14,14 +14,14 @@ const Reports = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Statistics & Reports</h2>
+      <h2 className="text-xl bg-[#141628] font-bold mb-4">Statistics & Reports</h2>
 
-      <div className="mb-4">
+      <div className="mb-4 ">
         <label className="mr-2 font-medium">Select Chart Type:</label>
         <select
           value={chartType}
           onChange={(e) => setChartType(e.target.value)}
-          className="border p-1 rounded"
+          className="border p-1 rounded bg-white text-black"
         >
           <option value="pie">Pie Chart</option>
           <option value="bar">Bar Chart</option>

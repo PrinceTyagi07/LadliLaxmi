@@ -63,7 +63,7 @@ const Users = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">All Users</h2>
+      <h2 className="text-xl bg-[#141628] font-bold mb-4">All Users</h2>
       <UserTable users={users} />
     </div>
   );
