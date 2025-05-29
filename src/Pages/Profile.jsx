@@ -1,38 +1,40 @@
-import {React,useEffect, useState  }from 'react'
-import UserSidebar from '../components/Profile/userSidebar'
-import axios  from "axios"
-import Main from '../components/Profile/main'
+import React, { useEffect, useState } from 'react';
+import UserSidebar from '../components/Profile/userSidebar';
+import axios from 'axios';
+import Main from '../components/Profile/main';
 
 const Profile = () => {
-  
-    const [user, setUser] = useState(null);
-    const userId = localStorage.getItem("userId"); // Assumes user ID is stored here
-  // const userId ="6835edbefba8fc45c7a67120"
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const  data  = await axios.get(
-            `http://localhost:4001/api/v1/profile/getprofile/${userId}`
-          );
-          setUser(data.data.profile);
-        
-        } catch (err) {
-          console.error("Failed to fetch profile", err);
-        }
-      };
-      if (userId) fetchData();
-    }, [userId]);
-  
-    if (!user) return <div className="text-center mt-20 text-xl">Loading...</div>;
-  
+  const [user, setUser] = useState(null);
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await axios.get(
+          `http://localhost:4001/api/v1/profile/getprofile/${userId}`
+        );
+        setUser(data.data.profile);
+      } catch (err) {
+        console.error("Failed to fetch profile", err);
+      }
+    };
+    if (userId) fetchData();
+  }, [userId]);
+
+  if (!user) return <div className="text-center mt-20 text-xl">Loading...</div>;
+
   return (
-    <div>
-      <div className="flex justify-between ">
-        <UserSidebar user={user} />
-        <Main  user={user} />
+    <div className="min-h-screen bg-gray-800 tw p-4 sm:p-6 md:p-8">
+      <div className="flex flex-col lg:flex-row ">
+        <div className="w-full lg:w-1/3">
+          <UserSidebar user={user} />
+        </div>
+        <div className="w-full ">
+          <Main user={user} />
+        </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;
