@@ -36,9 +36,11 @@ const registrationRoutes = require("./routes/registrationRoutes")
 // const adminRoutes = require('./routes/adminRoutes');
 const donationRoutes = require('./routes/donationRoutes');
 const profileRoute = require('./routes/ProfileRoute');
+const withdrawRoutes= require('./routes/withdrawRoutes')
 // app.use('/api/admin', adminRoutes);
 // Setting up routes
 app.use("/api/v1/auth", registrationRoutes);
+app.use("/api/v1/withdraw", withdrawRoutes);
 
 // app.use('/api/upgrade', upgradeRoutes);
 
