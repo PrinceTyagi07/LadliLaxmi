@@ -3,8 +3,8 @@ import StatsCharts from "../Components/StatsCharts";
 
 const StatCard = ({ title, value }) => (
   <div className="bg-white rounded-xl shadow p-4">
-    <h2 className="text-gray-500 text-sm">{title}</h2>
-    <p className="text-2xl font-semibold">{value}</p>
+    <h2 className="text-black text-sm">{title}</h2>
+    <p className="text-2xl text-black font-semibold">{value}</p>
   </div>
 );
 
@@ -36,7 +36,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+      <h1 className="text-2xl text-black font-bold mb-6">Admin Dashboard</h1>
 
       {/* Stat Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
