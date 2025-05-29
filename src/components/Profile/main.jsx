@@ -5,10 +5,11 @@ import Dashboard from "./Dashboard";
 import DashboardOverview from "./DashboardOverview";
 import Donation from "./Donation";
 import TransactionHistory from "./TransactionHistory";
+import  MyTeam from "./MyTeam"
 const Main = ({ user }) => {
   return (
 
-    <div className="flex items-center justify-center mx-auto flex-col ">
+    <div className="flex items-center my-10 mx-auto w-[80%] px-5 flex-col ">
 
       <Routes>
         <Route
@@ -34,6 +35,12 @@ const Main = ({ user }) => {
           path="/downline"
           element={
             <Dashboard user={user} matrixChildren={user.matrixChildren} />
+          }
+        />
+        <Route
+          path="/myteam"
+          element={
+            <MyTeam team={user} matrixChildren={user.matrixChildren} />
           }
         />
         <Route

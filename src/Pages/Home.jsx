@@ -9,7 +9,7 @@ import FAQ from "../sections/FAQ";
 
 const Home = () => {
   return (
-    <div className="">
+    <div className="m-0">
         <Hero />
         <About />
         <Mission />
