@@ -49,7 +49,7 @@ const Login = () => {
         localStorage.setItem("user", JSON.stringify(user));
 
         // navigate("/account"); // Navigate to the home page or dashboard
-        navigate("/userdashboard"); // Navigate to the home page or dashboard
+        user.role==="Admin"?navigate("/Admindashboard/admin/dashboard"):navigate("/userdashboard"); // Navigate to the home page or dashboard
       } else {
         // Login failed
         setError(response.data.message || "Invalid email or password.");

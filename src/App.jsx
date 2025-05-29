@@ -16,6 +16,8 @@ import Footer from "./components/Footer";
 import Home from "./Pages/Home";
 import Registration from "./Pages/Registration";
 import Profile from "./Pages/Profile";
+import AdminMain from "./Admin/AdminMain";
+
 
 // Inline PrivateRoute component
 const PrivateRoute = ({ children }) => {
@@ -23,11 +25,13 @@ const PrivateRoute = ({ children }) => {
   return token ? children : <Navigate to="/account" replace />;
 };
 
+
+
 // --- App Component ---
 function App() {
   
   let email = ""; // Variable to hold the decoded email from the token
-
+let role=""
   // useSyncExternalStore is used here to get the 'token' from localStorage,
   // and re-render the component whenever the 'token' in localStorage changes
   // (e.g., from another tab, or from a direct localStorage.setItem call).
@@ -42,12 +46,16 @@ function App() {
 
   const getSnapshot = () => localStorage.getItem("token"); // Function to read the current token from localStorage
   const userToken = useSyncExternalStore(subscribe, getSnapshot, getSnapshot); // Get the current token
-
+ 
   // If a user token exists, attempt to decode it to extract the email.
   if (userToken) {
     try {
-      const decodedToken = jwtDecode(userToken); // Decode the JWT token
+      const decodedToken = jwtDecode(userToken); // Decode the JWT 
+      
+      // console.log(decodedToken)
+      role=decodedToken.role
       email = decodedToken.email; // Assuming your JWT has an 'email' field
+      console.log(role)
     } catch (error) {
       console.error("Invalid token or decoding error:", error);
       // If the token is invalid, it might be corrupted or expired.
@@ -56,9 +64,10 @@ function App() {
     }
   }
 
+
   return (
     <Router>
-      <Navbar />
+      <Navbar  role={role} />
 
       <Routes>
         {/* Public Route for Home page */}
@@ -74,6 +83,13 @@ function App() {
             <PrivateRoute>
               <Profile />
             </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Admindashboard/*"
+          element={
+            role==="Admin"&&
+              <AdminMain/>
           }
         />
 

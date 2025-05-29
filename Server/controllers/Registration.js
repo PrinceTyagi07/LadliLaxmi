@@ -6,8 +6,8 @@ const { findMatrixSlot } = require("../utils/matrix"); // This utility needs to 
 require("dotenv").config();
 
 // Ensure process.env.JWT_SECRET is set in your .env file
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (user) => {
+  return jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
     expiresIn: "3d",
   });
 };
@@ -172,8 +172,9 @@ exports.login = async (req, res) => {
     }
 
     // Login successful
-    const token = generateToken(user._id);
+    const token = generateToken(user);
     user.token = token;
+    console.log(token)
     const options = {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
       httpOnly: true, // Prevent client-side JS from accessing the cookie

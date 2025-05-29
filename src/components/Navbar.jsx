@@ -4,7 +4,7 @@ import { Link as ScrollLink } from "react-scroll";
 import { jwtDecode } from "jwt-decode";
 import {useToken} from "../hooks/usetoken"
 import { FaUserTie } from "react-icons/fa";
-const Navbar = () => {
+const Navbar = ({role}) => {
 
     const navigate = useNavigate(); // Call useNavigate at the top level
     const token = useToken();
@@ -74,12 +74,12 @@ const Navbar = () => {
 
       <div className="flex space-x-6 cursor-pointer text-lg font-medium hover:text-amber-600 transition">
         
-        
+       { role==="Admin"?("Admin"):(
         <button className=" px-2 border-none  shadow-amber-300" type="button"
         onClick={() => navigate(user ? "/userdashboard" : "/account")}>
           {user ?<span className="items-center pr-4 justify-center flex flex-col "> <FaUserTie  className="w-[3vw] h-[3vw]" /> <span  className="text-sm"> profile</span></span> : "Register / Login"}
         </button>
-        
+        )}
       </div>
     </nav>
   );

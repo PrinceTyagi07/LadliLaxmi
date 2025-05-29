@@ -1,0 +1,82 @@
+import { useEffect, useState } from "react";
+import StatsCharts from "../Components/StatsCharts";
+
+const StatCard = ({ title, value }) => (
+  <div className="bg-white rounded-xl shadow p-4">
+    <h2 className="text-gray-500 text-sm">{title}</h2>
+    <p className="text-2xl font-semibold">{value}</p>
+  </div>
+);
+
+const Dashboard = () => {
+  const [stats, setStats] = useState({});
+  const [chartType, setChartType] = useState("pie");
+
+  useEffect(() => {
+    async function fetchStats() {
+      const data = {
+        totalUsers: 1200,
+        totalHelpGiven: 85000,
+        totalHelpReceived: 92000,
+        totalWithdraws: 48000,
+        rewards: 18000
+      };
+      setStats(data);
+    }
+
+    fetchStats();
+  }, []);
+
+  const statDataArray = Object.entries(stats).map(([key, value]) => ({
+    label: key
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (str) => str.toUpperCase()),
+    value: value
+  }));
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {Object.entries(stats).map(([key, value]) => (
+          <StatCard
+            key={key}
+            title={key
+              .replace(/([A-Z])/g, " $1")
+              .replace(/^./, (str) => str.toUpperCase())}
+            value={
+              typeof value === "number" && key.toLowerCase().includes("help")
+                ? `₹${value.toLocaleString()}`
+                : typeof value === "number" && key.toLowerCase().includes("withdraw")
+                ? `₹${value.toLocaleString()}`
+                : value
+            }
+          />
+        ))}
+      </div>
+
+      {/* Chart Type Dropdown */}
+      <div className="mb-4">
+        <label className="font-medium mr-2">Chart Type:</label>
+        <select
+          className="border px-3 py-2 rounded"
+          value={chartType}
+          onChange={(e) => setChartType(e.target.value)}
+        >
+          <option value="pie">Pie Chart</option>
+          <option value="bar">Bar Chart</option>
+          <option value="line">Line Chart</option>
+          <option value="area">Area Chart</option>
+          <option value="radar">Radar Chart</option>
+        </select>
+      </div>
+
+      {/* Stats Chart */}
+      <StatsCharts stats={statDataArray} type={chartType} />
+    </div>
+  );
+};
+
+export default Dashboard;
