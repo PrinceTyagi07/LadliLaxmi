@@ -8,7 +8,7 @@ const UserSidebar = ({ user, onLogout }) => {
   return (
     <>
       {/* Mobile hamburger button */}
-      <div className="md:hidden p-4 mt-44 bg-gray-800 text-white flex justify-between items-center">
+      <div className="md:hidden p-4  md:mt-0  bg-gray-800 text-white flex justify-between items-center">
         <h3 className="text-lg font-bold">Welcome, {user?.name}!</h3>
         <button
           onClick={() => setIsOpen(!isOpen)}
