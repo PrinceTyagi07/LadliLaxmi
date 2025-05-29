@@ -5,25 +5,26 @@ import DashboardOverview from "./DashboardOverview";
 import Donation from "./Donation";
 import TransactionHistory from "./TransactionHistory";
 import MyTeam from "./MyTeam";
+import Withdraw from "./Withdraw";
 
 const Main = ({ user }) => {
   return (
-    <div className="flex flex-col items-center my-6 md:my-10 mx-auto w-full border h-screen max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col w-full min-h-screen px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto py-6 ">
       <Routes>
         <Route
           path="/"
           element={
-            <div className="text-center text-white p-6 sm:p-8">
-              <strong className="text-lg sm:text-xl md:text-2xl">
+            <div className="flex flex-col items-center justify-center text-center text-white px-4 py-10 sm:py-16">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-semibold">
                 Hii, Welcome Back
-                <br />
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-amber-400 mt-2">
-                  {user.name}
-                </h1>
-                <br />
-              </strong>
-              <p className="text-xl sm:text-2xl">Check Out your Dashboard</p>
-              <h2 className="text-4xl sm:text-5xl mt-4">👈</h2>
+              </h1>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-amber-400 font-bold mt-2">
+                {user.name}
+              </h2>
+              <p className="text-xl sm:text-2xl mt-6">
+                Check Out your Dashboard
+              </p>
+              <h3 className="text-4xl sm:text-5xl mt-4">👈</h3>
             </div>
           }
         />
@@ -32,20 +33,32 @@ const Main = ({ user }) => {
           element={<DashboardOverview user={user} />}
         />
         <Route
+          path="/withdraw"
+          element={<Withdraw user={user} />}
+        />
+        <Route
           path="/downline"
-          element={<Dashboard user={user} matrixChildren={user.matrixChildren} />}
+          element={
+            <Dashboard user={user} matrixChildren={user.matrixChildren} />
+          }
         />
         <Route
           path="/myteam"
-          element={<MyTeam team={user} matrixChildren={user.matrixChildren} />}
+          element={
+            <MyTeam team={user} matrixChildren={user.matrixChildren} />
+          }
         />
         <Route
           path="/donation"
-          element={<Donation user={user} matrixChildren={user.matrixChildren} />}
+          element={
+            <Donation user={user} matrixChildren={user.matrixChildren} />
+          }
         />
         <Route
           path="/transactions"
-          element={<TransactionHistory walletTransactions={user.walletTransactions} />}
+          element={
+            <TransactionHistory walletTransactions={user.walletTransactions} />
+          }
         />
       </Routes>
     </div>
