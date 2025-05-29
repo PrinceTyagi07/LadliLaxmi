@@ -1,19 +1,13 @@
 import React from "react";
+import TreeGraph from "./TreeGraph";
 
 const TreeNode = ({ user }) => {
+ console.log(user)
   return (
-    <div className="ml-4 border-l-2 pl-4">
-      <div className="font-semibold">{user.name}</div>
-      <div className="text-sm text-gray-600">{user.email}</div>
-      <div className="text-sm text-gray-600">
-        Code: {user.referralCode}<span className="ml-4">Level: {user.currentLevel}</span></div>
-      {user.matrixChildren?.length > 0 && (
-        <div className="mt-2">
-          {user.matrixChildren.map((child) => (
-            <TreeNode key={child._id} user={child} />
-          ))}
-        </div>
-      )}
+    <div className="p-4 w-[80vw]">
+      {/* <h1 className="text-2xl font-bold mb-4">Referral Matrix Tree</h1> */}
+     
+      <TreeGraph rootUser={user} />
     </div>
   );
 };

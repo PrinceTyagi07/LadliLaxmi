@@ -12,12 +12,13 @@ const Dashboard = ({ user }) => {
         <div className="font-semibold text-lg">{user.name}</div>
         <div className="text-sm text-gray-600">{user.email}</div>
         <div className="text-sm text-gray-600">
-          Code: {user.referralCode}
+          Code: {user.referralCode} 
           <span className="ml-4">Level: {user.currentLevel}</span>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
+       
         {user.matrixChildren?.length > 0 ? (
           user.matrixChildren.map((child, index) => (
             <TreeNode key={child._id || index} user={child} />

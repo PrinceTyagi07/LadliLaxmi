@@ -8,7 +8,7 @@ const fetchMatrixDescendants = async (userId, visited = new Set()) => {
   visited.add(userId.toString());
 
   const user = await User.findById(userId)
-    .populate("matrixChildren", "name email referralCode currentLevel")
+    .populate("matrixChildren", "name email referralCode currentLevel referredBy")
     .lean();
 
   const descendants = [];
@@ -32,7 +32,7 @@ exports.getProfile = async (req, res) => {
 
     const user = await User.findById(userId)
       .populate("directReferrals", "name email")
-      .populate("matrixChildren", "name email referralCode currentLevel")
+      .populate("matrixChildren", "name email referralCode currentLevel referredBy ")
       .populate("donationsSent")
       .populate("donationsReceived")
       .populate("walletTransactions")

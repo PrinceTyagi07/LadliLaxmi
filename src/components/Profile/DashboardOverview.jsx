@@ -10,7 +10,7 @@ const InfoCard = ({ title, value, color }) => (
 
 const DashboardOverview = ({ user }) => {
   if (!user) return null;
-console.log(user)
+// console.log(user)
   const handleCopy = () => {
     navigator.clipboard.writeText(user.referralCode);
     alert("Referral code copied to clipboard!");
