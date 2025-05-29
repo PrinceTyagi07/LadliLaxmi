@@ -44,7 +44,7 @@ const Withdraws = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Withdraw Requests</h2>
+      <h2 className="text-xl bg-[#141628] font-bold mb-4">Withdraw Requests</h2>
       <WithdrawApproval requests={requests} onApprove={handleApprove} />
     </div>
   );

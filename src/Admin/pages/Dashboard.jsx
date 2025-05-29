@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import StatsCharts from "../Components/StatsCharts";
 
 const StatCard = ({ title, value }) => (
-  <div className="bg-white rounded-xl shadow p-4">
+  <div className="bg-[#141628] rounded-xl shadow p-4">
     <h2 className="text-gray-500 text-sm">{title}</h2>
     <p className="text-2xl font-semibold">{value}</p>
   </div>

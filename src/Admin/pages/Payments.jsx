@@ -50,7 +50,7 @@ const Payments = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-4">Pending Help Approvals</h2>
+      <h2 className="text-xl bg-[#141628] font-bold mb-4">Pending Help Approvals</h2>
       <PaymentApproval
         payments={payments}
         onApprove={handleApprove}

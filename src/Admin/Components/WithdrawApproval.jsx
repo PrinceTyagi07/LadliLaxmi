@@ -6,7 +6,7 @@ export default function WithdrawApproval({ requests, onApprove }) {
   return (
     <div>
       {requests.map((req) => (
-        <div key={req._id} className="bg-white p-4 rounded shadow mb-4 border border-gray-200">
+        <div key={req._id} className="bg-[#141628] p-4 rounded shadow mb-4 border border-gray-200">
           <p><strong>User:</strong> {req.user}</p>
           <p><strong>Amount:</strong> ₹{req.amount}</p>
           <p><strong>Bank Name:</strong> {req.bankName}</p>
