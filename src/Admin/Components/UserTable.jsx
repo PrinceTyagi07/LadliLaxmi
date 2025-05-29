@@ -1,8 +1,8 @@
 export default function UserTable({ users }) {
   return (
     <div className="overflow-x-auto">
-      <table className="table-auto w-full bg-white rounded shadow">
-        <thead className="bg-gray-100">
+      <table className="table-auto w-full bg-[#141628] rounded shadow">
+        <thead className="b">
           <tr>
             <th className="py-2 px-4 text-left">Name</th>
             <th className="py-2 px-4 text-left">Email</th>
