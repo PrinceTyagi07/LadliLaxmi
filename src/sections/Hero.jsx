@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-const Hero = () => {
+const Hero = ({role}) => {
   const navigate = useNavigate();
   return (
     <section id="home" className="relative w-full h-screen flex items-center justify-center bg-gray-600 text-white overflow-hidden">
@@ -14,7 +14,12 @@ const Hero = () => {
         <p className="text-xl md:text-2xl mb-4">
           Help today because tomorrow you may be the one who needs helping!
         </p>
-        <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+        {
+          role ?(
+          <p>you are loged in already  go to profile </p>
+          ):(
+            
+         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
           <button onClick={() => navigate("/account")} className="px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105">
             LOGIN
           </button>
@@ -22,6 +27,9 @@ const Hero = () => {
             REGISTER
           </button>
         </div>
+            
+          )
+        }
       </div>
 
       

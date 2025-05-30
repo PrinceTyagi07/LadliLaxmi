@@ -71,7 +71,7 @@ let role=""
 
       <Routes>
         {/* Public Route for Home page */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home role={role} />} />
 
         <Route
           path="/account/*"

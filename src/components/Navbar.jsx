@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link as ScrollLink } from "react-scroll";
 import { jwtDecode } from "jwt-decode";
@@ -20,8 +20,11 @@ const Navbar = ({ role }) => {
     }
   }
 
+  // Set the home path based on role
+  const homePath = role === "Admin" ? "/Admindashboard/dashboard" : "home";
+
   const navItem = [
-    { link: "HOME", path: "home" },
+    { link: "HOME", path: homePath },
     { link: "ABOUT", path: "about" },
     { link: "OUR MISSIONS", path: "missions" },
     { link: "SERVICES", path: "services" },
@@ -66,7 +69,13 @@ const Navbar = ({ role }) => {
                 offset={-100}
                 duration={500}
                 className="cursor-pointer text-lg font-medium hover:text-amber-600 transition"
-                onClick={() => navigate("/")}
+                onClick={() => {
+                  if (item.path.startsWith("/")) {
+                    navigate(item.path);
+                  } else {
+                    navigate("/");
+                  }
+                }}
               >
                 {item.link}
               </ScrollLink>
@@ -74,10 +83,15 @@ const Navbar = ({ role }) => {
           ))}
         </ul>
 
-        {/* User/Profile/Login */}
+        {/* Profile/Login (Desktop) */}
         <div className="hidden lg:flex space-x-4 items-center">
           {role === "Admin" ? (
-            <span className="text-lg">Admin</span>
+            <span
+              onClick={() => navigate("/Admindashboard/dashboard")}
+              className="text-lg cursor-pointer"
+            >
+              Dashboard
+            </span>
           ) : (
             <button
               className="text-lg px-3 py-1 rounded shadow shadow-amber-300 hover:text-amber-600 transition"
@@ -121,7 +135,11 @@ const Navbar = ({ role }) => {
                   duration={500}
                   className="block text-lg font-medium hover:text-amber-500 transition"
                   onClick={() => {
-                    navigate("/");
+                    if (item.path.startsWith("/")) {
+                      navigate(item.path);
+                    } else {
+                      navigate("/");
+                    }
                     setIsOpen(false);
                   }}
                 >
@@ -131,7 +149,15 @@ const Navbar = ({ role }) => {
             ))}
             <li>
               {role === "Admin" ? (
-                <span className="text-lg">Admin</span>
+                <span
+                  onClick={() => {
+                    navigate("/Admindashboard/dashboard");
+                    setIsOpen(false);
+                  }}
+                  className="text-lg cursor-pointer"
+                >
+                  Dashboard
+                </span>
               ) : (
                 <button
                   className="text-lg w-full text-left hover:text-amber-600"

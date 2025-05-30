@@ -7,10 +7,14 @@ import { useState , useEffect } from "react";
 import About from "../sections/About";
 import FAQ from "../sections/FAQ";
 
-const Home = () => {
+const Home = ({role}) => {
+  
   return (
     <div className="m-0">
-        <Hero />
+      {
+        role === "user" ? (<Hero  role={role} />):("")
+      }
+        
         <About />
         <Mission />
         <Services />
