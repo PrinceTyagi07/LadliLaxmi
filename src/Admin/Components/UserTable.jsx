@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 
-export default function UserTable({ users: initialUsers }) {
-  const [users, setUsers] = useState(initialUsers );
+export default function UserTable({ users }) {
+
+  
 
   const handleDelete = async (userId) => {
     try {
