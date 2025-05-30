@@ -1,11 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
 
-export default function UserTable({ users }) {
-
-  
-
+export default function UserTable({ users, setUsers }) {
   const handleDelete = async (userId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+
     try {
       await axios.delete(`http://localhost:4001/api/v1/admin/deleteUser/${userId}`);
       setUsers(prev => prev.filter(user => user._id !== userId));
@@ -29,22 +28,28 @@ export default function UserTable({ users }) {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
-            <tr key={user._id} className="border-t hover:bg-gray-800">
-              <td className="py-2 px-4">{user?.name || "N/A"}</td>
-              <td className="py-2 px-4">{user?.email || "N/A"}</td>
-              <td className="py-2 px-4">{user?.referralCode || "N/A"}</td>
-              <td className="py-2 px-4">{user?.isActive ? "Active" : "Inactive"}</td>
-              <td className="py-2 px-4">
-                <button
-                  className="bg-red-400 hover:bg-red-600 text-white px-3 py-1 rounded"
-                  onClick={() => handleDelete(user._id)}
-                >
-                  Delete
-                </button>
-              </td>
+          {users.length === 0 ? (
+            <tr>
+              <td colSpan="5" className="text-center py-4">No users found</td>
             </tr>
-          ))}
+          ) : (
+            users.map(user => (
+              <tr key={user._id} className="border-t hover:bg-gray-800">
+                <td className="py-2 px-4">{user?.name || "N/A"}</td>
+                <td className="py-2 px-4">{user?.email || "N/A"}</td>
+                <td className="py-2 px-4">{user?.referralCode || "N/A"}</td>
+                <td className="py-2 px-4">{user?.isActive ? "Active" : "Inactive"}</td>
+                <td className="py-2 px-4">
+                  <button
+                    className="bg-red-400 hover:bg-red-600 text-white px-3 py-1 rounded"
+                    onClick={() => handleDelete(user._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>
