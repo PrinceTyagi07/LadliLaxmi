@@ -4,7 +4,6 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Payments from './pages/Payments';
-import Withdraws from './pages/Withdraws';
 import Reports from './pages/Reports';
 import Sidebar from './Components/Sidebar';
 
@@ -33,11 +32,11 @@ const AdminMain = () =>  {
             <Route path="/dashboard" element={<AdminLayout><Dashboard /></AdminLayout>} />
             <Route path="/users" element={<AdminLayout><Users /></AdminLayout>} />
             <Route path="/payments" element={<AdminLayout><Payments /></AdminLayout>} />
-            <Route path="/withdraws" element={<AdminLayout><Withdraws /></AdminLayout>} />
+        
             <Route path="/reports" element={<AdminLayout><Reports /></AdminLayout>} />
           </>
         ) : (
-          <Route path="*" element={<Navigate to="/admin/login" />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         )}
       </Routes>
     

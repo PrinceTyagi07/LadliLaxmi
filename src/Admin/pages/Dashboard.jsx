@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import StatsCharts from "../Components/StatsCharts";
 
 const StatCard = ({ title, value }) => (
@@ -14,14 +15,21 @@ const Dashboard = () => {
 
   useEffect(() => {
     async function fetchStats() {
-      const data = {
-        totalUsers: 1200,
-        totalHelpGiven: 85000,
-        totalHelpReceived: 92000,
-        totalWithdraws: 48000,
-        rewards: 18000
-      };
-      setStats(data);
+      try {
+        const res = await axios.get("http://localhost:4001/api/v1/admin/getallusercount");
+        const { totalUsers } = res.data;
+
+        const data = {
+          totalUsers,
+          totalHelpGiven: 850,
+          totalHelpReceived: 920,
+          totalWithdraws: 480,
+        };
+
+        setStats(data);
+      } catch (error) {
+        console.error("Failed to fetch stats:", error);
+      }
     }
 
     fetchStats();
@@ -31,7 +39,7 @@ const Dashboard = () => {
     label: key
       .replace(/([A-Z])/g, " $1")
       .replace(/^./, (str) => str.toUpperCase()),
-    value: value
+    value: value,
   }));
 
   return (
@@ -47,9 +55,9 @@ const Dashboard = () => {
               .replace(/([A-Z])/g, " $1")
               .replace(/^./, (str) => str.toUpperCase())}
             value={
-              typeof value === "number" && key.toLowerCase().includes("help")
-                ? `₹${value.toLocaleString()}`
-                : typeof value === "number" && key.toLowerCase().includes("withdraw")
+              typeof value === "number" &&
+              (key.toLowerCase().includes("help") ||
+                key.toLowerCase().includes("withdraw"))
                 ? `₹${value.toLocaleString()}`
                 : value
             }

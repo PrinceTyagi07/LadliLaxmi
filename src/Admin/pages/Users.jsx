@@ -1,69 +1,28 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import UserTable from "../Components/UserTable";
 
 const Users = () => {
-  // Dummy data
-  const users = [
-    {
-      _id: "1",
-      name: "Mukesh Kumar",
-      email: "mukesh@example.com",
-      referralCode: "X823887",
-      status: "Active"
-    },
-    {
-      _id: "2",
-      name: "Ravi Sharma",
-      email: "ravi@example.com",
-      referralCode: "X912345",
-      status: "Inactive"
-    },
-    {
-      _id: "3",
-      name: "Anjali Mehra",
-      email: "anjali@example.com",
-      referralCode: "X765432",
-      status: "Pending"
-    },
-    {
-      _id: "4",
-      name: "Sunil Yadav",
-      email: "sunil@example.com",
-      referralCode: "X554433",
-      status: "Active"
-    },
-    {
-      _id: "5",
-      name: "Pooja Verma",
-      email: "pooja@example.com",
-      referralCode: "X998877",
-      status: "Inactive"
-    },
-    {
-      _id: "6",
-      name: "Aman Singh",
-      email: "aman@example.com",
-      referralCode: "X112233",
-      status: "Active"
-    },
-    {
-      _id: "7",
-      name: "Suman Joshi",
-      email: "suman@example.com",
-      referralCode: "X334455",
-      status: "Pending"
-    },
-    {
-      _id: "8",
-      name: "Karan Patel",
-      email: "karan@example.com",
-      referralCode: "X667788",
-      status: "Active"
-    },
-  ];
+  const [users, setUsers] = useState([]);
 
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get("http://localhost:4001/api/v1/admin/getalluser");
+        setUsers(res.data);
+      } catch (err) {
+        console.error("Failed to fetch users:", err);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+console.log(users)
   return (
-    <div>
-      <h2 className="text-xl bg-[#141628] font-bold mb-4">All Users</h2>
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4 text-white bg-[#141628] p-2 rounded-md shadow-md">
+        All Users
+      </h2>
       <UserTable users={users} />
     </div>
   );
