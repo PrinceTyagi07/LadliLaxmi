@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useState } from "react";
 
-export default function UserTable({ users: initialUsers }) {
-  const [users, setUsers] = useState(initialUsers );
-
+export default function UserTable({ users}) {
+console.log("checking tables", users)
   const handleDelete = async (userId) => {
     try {
       await axios.delete(`http://localhost:4001/api/v1/admin/deleteUser/${userId}`);
