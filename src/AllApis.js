@@ -20,7 +20,7 @@ export const Apis = {
     ------------------------------------------------------------------------------------------------------------------------------*/
     getAllUsers:BaseUrl+"api/v1/admin/getalluser",
     getAllUsersCount:BaseUrl+"api/v1/admin/getalluserCount",
-    deleteUser:BaseUrl+"api/v1/admin//deleteUser/:id",
+    deleteUser:BaseUrl+"api/v1/admin/deleteUser/:id",
 
     /*-----------------------------------------------------------------------------------------------------------------------------
     withdraw Apis
