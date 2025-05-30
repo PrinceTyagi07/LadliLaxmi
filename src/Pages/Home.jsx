@@ -7,6 +7,7 @@ import About from "../sections/About";
 import FAQ from "../sections/FAQ";
 import { jwtDecode } from "jwt-decode";
 
+
 const Home = () => {
   const [role, setRole] = useState(null);
 

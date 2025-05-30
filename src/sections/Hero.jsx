@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import { jwtDecode } from 'jwt-decode'; // ✅ Correct way
 
 
 const Hero = () => {
+
   const navigate = useNavigate();
   const [role, setRole] = useState(null);
 
@@ -46,6 +48,7 @@ const Hero = () => {
         <p className="text-xl md:text-2xl mb-4">
           Help today because tomorrow you may be the one who needs helping!
         </p>
+
         
         {role ? (
           <p>You are already logged in. Go to your profile.</p>
@@ -65,6 +68,7 @@ const Hero = () => {
             </button>
           </div>
         )}
+
       </div>
     </section>
   );
