@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import Logout from '../../components/Auth/Logout';
 
 const Sidebar = () => {
   const linkClass = ({ isActive }) =>
@@ -24,6 +25,9 @@ const Sidebar = () => {
           Reports
         </NavLink>
       </nav>
+       <div className="mt-6 border-t border-gray-700 pt-4">
+          <Logout />
+        </div>
     </div>
   );
 };

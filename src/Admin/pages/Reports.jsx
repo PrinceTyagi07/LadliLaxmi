@@ -1,22 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import StatsCharts from "../Components/StatsCharts";
 
 const Reports = () => {
   const [chartType, setChartType] = useState("pie");
+  const [stats, setStats] = useState([
+    { label: "Withdrawals", value: 45 },
+    { label: "Pending KYC", value: 13 },
+    { label: "Completed KYC", value: 90 },
+  ]);
 
-  const stats = [
-    { label: "Total Users", value: 1500 },
-    { label: "Active Users", value: 1200 },
-    { label: "Withdrawals", value: 450 },
-    { label: "Pending KYC", value: 130 },
-    { label: "Completed KYC", value: 909 },
-  ];
+  useEffect(() => {
+    async function fetchUserCount() {
+      try {
+        const res = await axios.get("http://localhost:4001/api/v1/admin/getallusercount");
+        const { totalUsers } = res.data;
+
+        // Add total users to the stats list
+        setStats((prevStats) => [
+          ...prevStats,
+          { label: "Total Users", value: totalUsers },
+        ]);
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+      }
+    }
+
+    fetchUserCount();
+  }, []);
 
   return (
     <div>
-      <h2 className="text-xl bg-[#141628] font-bold mb-4">Statistics & Reports</h2>
+      <h2 className="text-xl bg-[#141628] text-white font-bold mb-4 px-4 py-2 rounded">
+        Statistics & Reports
+      </h2>
 
-      <div className="mb-4 ">
+      <div className="mb-4">
         <label className="mr-2 font-medium">Select Chart Type:</label>
         <select
           value={chartType}

@@ -21,9 +21,9 @@ const Dashboard = () => {
 
         const data = {
           totalUsers,
-          totalHelpGiven: 850,
-          totalHelpReceived: 920,
-          totalWithdraws: 480,
+          totalHelpGiven: 85,
+          totalHelpReceived: 92,
+          totalWithdraws: 48,
         };
 
         setStats(data);
