@@ -84,6 +84,7 @@ let role=""
           element={
             <PrivateRoute>
               <Profile />
+              
             </PrivateRoute>
           }
         />

@@ -32,7 +32,7 @@ app.get("/", (req, res) => {
 });
 
 const registrationRoutes = require("./routes/registrationRoutes")
-// const upgradeRoutes = require('./routes/upgrade');
+const upgradeRoutes = require('./routes/upgrade');
 const adminRoutes = require('./routes/adminRoutes');
 const donationRoutes = require('./routes/donationRoutes');
 const profileRoute = require('./routes/ProfileRoute');
@@ -42,7 +42,7 @@ const withdrawRoutes= require('./routes/withdrawRoutes')
 app.use("/api/v1/auth", registrationRoutes);
 app.use("/api/v1/withdraw", withdrawRoutes);
 
-// app.use('/api/upgrade', upgradeRoutes);
+app.use('/api/v1/upgrade', upgradeRoutes);
 
 app.use("/api/v1/donations", donationRoutes);
 app.use("/api/v1/profile", profileRoute);

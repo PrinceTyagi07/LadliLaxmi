@@ -6,6 +6,7 @@ import DonatePage from "./Activation";
 import TransactionHistory from "./TransactionHistory";
 import MyTeam from "./MyTeam";
 import Withdraw from "./Withdraw";
+import UpgradePage from "./UpgradePage";
 
 const Main = ({ user }) => {
   return (
@@ -28,37 +29,30 @@ const Main = ({ user }) => {
             </div>
           }
         />
-        <Route
-          path="/dashboardOverview"
-          element={<DashboardOverview user={user} />}
-        />
-        <Route
-          path="/withdraw"
-          element={<Withdraw user={user} />}
-        />
+        <Route path="/dashboardOverview" element={<DashboardOverview user={user} />} />
+        <Route path="/withdraw" element={<Withdraw user={user} />} />
         <Route
           path="/downline"
-          element={
-            <Dashboard user={user} matrixChildren={user.matrixChildren} />
-          }
+          element={<Dashboard user={user} matrixChildren={user.matrixChildren} />}
         />
         <Route
           path="/myteam"
-          element={
-            <MyTeam team={user} matrixChildren={user.matrixChildren} />
-          }
+          element={<MyTeam team={user} matrixChildren={user.matrixChildren} />}
         />
-        <Route
-          path="/donatePage"
-          element={
-            <DonatePage user={user} matrixChildren={user.matrixChildren} />
-          }
-        />
+        {user.currentLevel === 0 ? (
+          <Route
+            path="/donatePage"
+            element={<DonatePage user={user} matrixChildren={user.matrixChildren} />}
+          />
+        ) : (
+          <Route
+            path={`/upgrade/${user.currentLevel + 1}`}
+            element={<UpgradePage user={user} matrixChildren={user.matrixChildren} />}
+          />
+        )}
         <Route
           path="/transactions"
-          element={
-            <TransactionHistory walletTransactions={user.walletTransactions} />
-          }
+          element={<TransactionHistory walletTransactions={user.walletTransactions} />}
         />
       </Routes>
     </div>
