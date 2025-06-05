@@ -67,7 +67,7 @@ exports.register = async (req, res) => {
       }
     } else {
       // Case 2: No referral code provided, place under an admin
-      referrer = await User.findOne({ role: "admin" }); // Find any admin user
+      referrer = await User.findOne({ role: "Admin" }); // Find any admin user
       if (!referrer) {
         // This is a critical error if no admin exists to place unreferred users
         return res.status(500).json({

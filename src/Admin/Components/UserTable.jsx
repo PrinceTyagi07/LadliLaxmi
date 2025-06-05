@@ -1,11 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
 
-export default function UserTable({ user }) {
+export default function UserTable({ users }) {
 
-  const [users, setUsers] = useState(user)
+  
 
   const handleDelete = async (userId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
+
     try {
       await axios.delete(`http://localhost:4001/api/v1/admin/deleteUser/${userId}`);
       setUsers(prev => prev.filter(user => user._id !== userId));
@@ -29,7 +32,7 @@ export default function UserTable({ user }) {
           </tr>
         </thead>
         <tbody>
-          {user.map(user => (
+          {users.map(user => (
             <tr key={user._id} className="border-t hover:bg-gray-800">
               <td className="py-2 px-4">{user?.name || "N/A"}</td>
               <td className="py-2 px-4">{user?.email || "N/A"}</td>
