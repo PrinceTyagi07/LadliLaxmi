@@ -11,7 +11,7 @@ const UserSidebar = ({ user }) => {
     { to: "/userdashboard/dashboardOverview", label: "Dashboard" },
     { to: "/userdashboard/withdraw", label: "Withdraw" },
     ...(user?.currentLevel === 0
-      ? [{ to: "/userdashboard/donation", label: "Activate Level 1" }]
+      ? [{ to: "/userdashboard/donatePage", label: "Activate Level 1" }]
       : user?.currentLevel < 11
       ? [
           {
@@ -20,6 +20,7 @@ const UserSidebar = ({ user }) => {
           },
         ]
       : []),
+    // {to:"/userdashboard/donatePage",label:"Activate/Upgrade Levels"},
     { to: "/userdashboard/downline", label: "My Downline" },
     { to: "/userdashboard/myteam", label: "My Team" },
     { to: "/userdashboard/transactions", label: "Transaction History" },

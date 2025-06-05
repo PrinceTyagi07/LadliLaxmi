@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
 import DashboardOverview from "./DashboardOverview";
-import Donation from "./Donation";
+import DonatePage from "./Activation";
 import TransactionHistory from "./TransactionHistory";
 import MyTeam from "./MyTeam";
 import Withdraw from "./Withdraw";
@@ -49,9 +49,9 @@ const Main = ({ user }) => {
           }
         />
         <Route
-          path="/donation"
+          path="/donatePage"
           element={
-            <Donation user={user} matrixChildren={user.matrixChildren} />
+            <DonatePage user={user} matrixChildren={user.matrixChildren} />
           }
         />
         <Route
