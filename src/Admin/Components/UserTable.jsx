@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useState } from "react";
 
-export default function UserTable({ users }) {
+export default function UserTable({ user }) {
 
-  
+  const [users, setUsers] = useState(user)
 
   const handleDelete = async (userId) => {
     try {
@@ -29,7 +29,7 @@ export default function UserTable({ users }) {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
+          {user.map(user => (
             <tr key={user._id} className="border-t hover:bg-gray-800">
               <td className="py-2 px-4">{user?.name || "N/A"}</td>
               <td className="py-2 px-4">{user?.email || "N/A"}</td>

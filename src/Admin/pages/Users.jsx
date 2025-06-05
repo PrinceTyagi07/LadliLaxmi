@@ -23,7 +23,7 @@ console.log(users)
       <h2 className="text-xl font-bold mb-4 text-white bg-[#141628] p-2 rounded-md shadow-md">
         All Users
       </h2>
-      <UserTable users={users} />
+      <UserTable user={users} />
     </div>
   );
 };
