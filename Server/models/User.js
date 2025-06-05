@@ -83,7 +83,7 @@ const userSchema = new mongoose.Schema(
       walletTransactions: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "WalletTransaction"
-      }],
+      },],
 
       // no. of people to whome it referes
       directReferrals: [{
