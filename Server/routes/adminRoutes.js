@@ -1,15 +1,15 @@
 const express = require("express");
-const { isAdmin } = require("../middleware/auth");
+const { isAdmin,auth } = require("../middleware/auth");
 const { getAllUsers, getUserCount, deleteUser } = require("../controllers/Admin");
 const router = express.Router();
 
 // Get total user count
-router.get("/getalluserCount",isAdmin, getUserCount); 
+router.get("/getalluserCount",auth,isAdmin, getUserCount); 
 
 // Get all users
-router.get("/getalluser",isAdmin, getAllUsers); 
+router.get("/getalluser",auth,isAdmin, getAllUsers); 
 
 // Delete user by ID
-router.delete("/deleteUser/:id",isAdmin, deleteUser); 
+router.delete("/deleteUser/:id",auth,isAdmin, deleteUser); 
 
 module.exports = router;

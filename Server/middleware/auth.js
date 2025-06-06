@@ -43,36 +43,28 @@ const auth = async (req, res, next) => {
   }
 };
 
-const protect = async (req, res, next) => {
-  let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      token = req.headers.authorization.split(" ")[1];
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.id).select("-password");
-      next();
-    } catch (error) {
-      console.error(error);
-      res.status(401).json({ message: "Not authorized, token failed" });
-    }
-  }
-  if (!token) {
-    res.status(401).json({ message: "Not authorized, no token" });
-  }
-};
-
 const isAdmin = async (req, res, next) => {
-  const { userId } = req.body;
+  const { userId } = req.user.id;
   const user = await User.findById(userId);
-  if (user && user.role === "admin") {
-    next();
-  } else {
+  const token =
+  req.cookies?.token ||
+  req.body?.token ||
+  req.header("Authorization")?.replace("Bearer ", "");
+    if (!token) {
+      return res.status(401).json({ success: false, message: `Token Missing` });
+    }
+    try {
+      const decode = await jwt.verify(token, process.env.JWT_SECRET);
+      if(decode && decode.role === "Admin"){
+        next();
+      } else {
     return res.status(403).json({ message: "Admin access only" });
   }
+    } catch (error) {
+      return res.status(403).json({ message: "token for Admin access only is not present" });
+    }
+
 };
 
 
-module.exports = { auth , protect, isAdmin };
+module.exports = { auth , isAdmin };

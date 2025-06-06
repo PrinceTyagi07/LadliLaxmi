@@ -16,7 +16,15 @@ const Dashboard = () => {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await axios.get("http://localhost:4001/api/v1/admin/getallusercount");
+        const token = localStorage.getItem("token"); // ✅ define token here
+        const res = await axios.get(
+          "http://localhost:4001/api/v1/admin/getallusercount",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const { totalUsers } = res.data;
 
         const data = {

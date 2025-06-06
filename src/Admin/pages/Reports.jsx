@@ -13,7 +13,12 @@ const Reports = () => {
   useEffect(() => {
     async function fetchUserCount() {
       try {
-        const res = await axios.get("http://localhost:4001/api/v1/admin/getallusercount");
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:4001/api/v1/admin/getallusercount", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
         const { totalUsers } = res.data;
 
         // Add total users to the stats list

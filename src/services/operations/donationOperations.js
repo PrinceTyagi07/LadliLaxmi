@@ -7,7 +7,7 @@ const DONATION_ENDPOINTS = {
   CAPTURE_PAYMENT_API: '/donations/create-order',
   VERIFY_PAYMENT_API: '/donations/verify-payment',
 };
-
+const token = localStorage.getItem("token"); // ✅ define token here
 // Function to create a Razorpay order in the backend
 export const createDonationOrder = async (levelId, id , token) => {
   const toastId = toast.loading('Creating order...');
@@ -17,7 +17,8 @@ export const createDonationOrder = async (levelId, id , token) => {
       {
         method: 'POST',
         url: DONATION_ENDPOINTS.CAPTURE_PAYMENT_API,
-        data: { userId: id, currentLevel: levelId },
+        data: { currentLevel: levelId },
+        // data: { userId: id, currentLevel: levelId },
         // Your interceptor automatically adds the token if present in localStorage.
         // However, if you explicitly want to pass it or ensure it's there for this specific call,
         // you can include it here:
@@ -50,7 +51,7 @@ export const verifyDonationPayment = async (paymentData , id , token) => {
       {
         method: 'POST',
         url: DONATION_ENDPOINTS.VERIFY_PAYMENT_API, // This points to the new /donations/verify-payment
-        data: { userId: id, razorpay_order_id:paymentData.razorpay_order_id,
+        data: { razorpay_order_id:paymentData.razorpay_order_id,
            razorpay_payment_id:paymentData.razorpay_payment_id
             , razorpay_signature:paymentData.razorpay_signature,
             currentLevel:paymentData.currentLevel

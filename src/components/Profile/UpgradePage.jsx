@@ -36,7 +36,7 @@ const UpgradePage = ({ user }) => {
   }
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded shadow">
+    <div className="p-6 max-w-lg mx-auto bg-white rounded shadow flex flex-col justify-center   ">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">Upgrade to Level {nextLevel}</h2>
 
       <p className="text-gray-600 mb-2">Upgrade amount: ₹{upgradeAmount}</p>
