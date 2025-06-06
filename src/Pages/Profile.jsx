@@ -25,7 +25,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen  bg-gray-800 sm:p-6 md:p-1">
-      <div className="flex flex-col  items-start lg:flex-row   mx-auto">
+      <div className="flex flex-col items-start lg:flex-row mx-auto">
         <div className="w-full lg:w-1/4">
           <UserSidebar user={user} />
         </div>
