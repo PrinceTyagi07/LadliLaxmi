@@ -68,7 +68,7 @@ const Activation = () => {
   const handleLevelActivation = async (levelId) => {
     if (!user || !token) {
       toast.error("Please log in to activate levels.");
-      navigate('/login');
+      navigate('/account');
       return;
     }
 
