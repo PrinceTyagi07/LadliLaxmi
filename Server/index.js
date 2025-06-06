@@ -51,11 +51,11 @@ app.use('/api/v1/upgrade', upgradeRoutes);
 
 app.use("/api/v1/donations", donationRoutes);
 app.use("/api/v1/profile", profileRoute);
+app.use("/api/v1/admin",adminRoutes );
 
 // Admin routes
 
 
-app.use("/api/v1/admin",adminRoutes );
 
 app.get("/test", (req, res) => {
   return res.json({

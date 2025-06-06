@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const WithdrawRequest = require('../models/WithdrawRequest')
 
 // 1. Get all users (excluding password, with donations populated)
 exports.getAllUsers = async (req, res) => {
@@ -33,5 +34,16 @@ exports.deleteUser = async (req, res) => {
   } catch (err) {
     console.error("Error deleting user:", err);
     res.status(500).json({ error: 'Error deleting user' });
+  }
+};
+
+exports.withdrawals = async (req, res) => {
+  console.log("withdrswals called")
+  try {
+    const requests = await WithdrawRequest.find().populate("user", "email walletBalance").exec();;
+    console.log(requests);
+    res.status(200).json(requests);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch" });
   }
 };
