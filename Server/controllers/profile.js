@@ -7,6 +7,7 @@ const buildMatrixHierarchy = async (userId, visited = new Set(), depth = 0, maxD
 
   const user = await User.findById(userId)
     .populate("matrixChildren", "name email referralCode currentLevel")
+    .populate("walletTransactions")
     .lean();
 
   if (!user) return null;

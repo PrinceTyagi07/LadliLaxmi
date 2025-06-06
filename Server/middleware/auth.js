@@ -6,15 +6,15 @@ const User = require("../models/User");
 dotenv.config();
 
 // This function is used as middleware to authenticate user requests
-exports.auth = async (req, res, next) => {
+const auth = async (req, res, next) => {
   try {
     // Extracting JWT from request cookies, body or header
-    const token =
-      req.cookies.token ||
-      req.body.token ||
-      req.header("Authorization").replace("Bearer ", "");
-
+   const token =
+  req.cookies?.token ||
+  req.body?.token ||
+  req.header("Authorization")?.replace("Bearer ", "");
     // If JWT is missing, return 401 Unauthorized response
+    console.log("beckendd",token)
     if (!token) {
       return res.status(401).json({ success: false, message: `Token Missing` });
     }
@@ -75,4 +75,4 @@ const isAdmin = async (req, res, next) => {
 };
 
 
-module.exports = { protect, isAdmin };
+module.exports = { auth , protect, isAdmin };
