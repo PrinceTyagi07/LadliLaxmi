@@ -6,13 +6,18 @@ const Users = () => {
   const [users, setUsers] = useState([]);
 
   const fetchUsers = async () => {
-    try {
-      const res = await axios.get("http://localhost:4001/api/v1/admin/getalluser");
-      setUsers(res.data || []); // <-- safer handling
-    } catch (err) {
-      console.error("Failed to fetch users:", err);
-    }
-  };
+  try {
+    const token = localStorage.getItem("token"); // ✅ define token here
+    const res = await axios.get("http://localhost:4001/api/v1/admin/getalluser", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setUsers(res.data || []);
+  } catch (err) {
+    console.error("Failed to fetch users:", err);
+  }
+};
 
   useEffect(() => {
     fetchUsers();

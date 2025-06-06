@@ -5,19 +5,19 @@ export default function UserTable({ users }) {
 
   
 
-  const handleDelete = async (userId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-    if (!confirmDelete) return;
+  // const handleDelete = async (userId) => {
+  //   const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+  //   if (!confirmDelete) return;
 
-    try {
-      await axios.delete(`http://localhost:4001/api/v1/admin/deleteUser/${userId}`);
-      setUsers(prev => prev.filter(user => user._id !== userId));
-      alert("User deleted successfully");
-    } catch (error) {
-      console.error("Failed to delete user:", error);
-      alert("Failed to delete user");
-    }
-  };
+  //   try {
+  //     await axios.delete(`http://localhost:4001/api/v1/admin/deleteUser/${userId}`);
+  //     setUsers(prev => prev.filter(user => user._id !== userId));
+  //     alert("User deleted successfully");
+  //   } catch (error) {
+  //     console.error("Failed to delete user:", error);
+  //     alert("Failed to delete user");
+  //   }
+  // };
 
   return (
     <div className="overflow-x-auto">
@@ -28,7 +28,7 @@ export default function UserTable({ users }) {
             <th className="py-2 px-4 text-left">Email</th>
             <th className="py-2 px-4 text-left">Referral Code</th>
             <th className="py-2 px-4 text-left">Status</th>
-            <th className="py-2 px-4 text-left">Action</th>
+            {/* <th className="py-2 px-4 text-left">Action</th> */}
           </tr>
         </thead>
         <tbody>
@@ -38,14 +38,7 @@ export default function UserTable({ users }) {
               <td className="py-2 px-4">{user?.email || "N/A"}</td>
               <td className="py-2 px-4">{user?.referralCode || "N/A"}</td>
               <td className="py-2 px-4">{user?.isActive ? "Active" : "Inactive"}</td>
-              <td className="py-2 px-4">
-                <button
-                  className="bg-red-400 hover:bg-red-600 text-white px-3 py-1 rounded"
-                  onClick={() => handleDelete(user._id)}
-                >
-                  Delete
-                </button>
-              </td>
+              
             </tr>
           ))}
         </tbody>

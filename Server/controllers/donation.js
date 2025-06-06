@@ -11,8 +11,9 @@ const crypto = require("crypto"); // Added for signature verification
 
 // Create Razorpay Order API
 exports.capturePayment = async (req, res) => {
-  // const userId = req.user._id;
-  const { userId , currentLevel } = req.body; // This 'currentLevel' is the level being activated
+  const { currentLevel } = req.body;
+const userId = req.user.id; // ✅ token se mila hua user ID
+//   const { userId , currentLevel } = req.body; // This 'currentLevel' is the level being activated
 
   try {
     // Validate input
