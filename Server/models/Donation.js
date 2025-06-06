@@ -37,7 +37,9 @@ const donationSchema = new mongoose.Schema(
 
     transactionId: {
        type: String,
-       unique: true }
+       unique: true,
+       sparse:true,
+       }
   },
 
   {
