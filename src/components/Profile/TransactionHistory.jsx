@@ -21,6 +21,9 @@ const TransactionHistory = ({ user, walletTransactions }) => {
   };
 
   const getTransactionTypeDisplay = (type) => {
+    if (!type) { // Add this check
+      return 'N/A'; // Or any other suitable default
+    }
     switch (type) {
       case 'donation_sent':
         return 'Donation Sent';
@@ -73,7 +76,7 @@ const TransactionHistory = ({ user, walletTransactions }) => {
                 <tr key={tx._id} className="hover:bg-gray-50">
                   <td className="py-4 px-6 text-base text-gray-800">{formatDate(tx.createdAt)}</td>
                   <td className="py-4 px-6 text-base text-gray-800">{getTransactionTypeDisplay(tx.type)}</td>
-                  <td className={`py-4 px-6 text-base font-semibold ${tx.type.includes('received') ? 'text-green-600' : 'text-red-600'}`}>
+                  <td className={`py-4 px-6 text-base font-semibold ${tx.type?.includes('received') ? 'text-green-600' : 'text-red-600'}`}>
                     ₹{tx.amount?.toFixed(2)}
                   </td>
                   <td className="py-4 px-6 text-base text-gray-800">{tx.donationLevel || 'N/A'}</td>

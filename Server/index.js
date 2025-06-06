@@ -4,6 +4,7 @@ const app = express();
 const database = require("./config/database");
 const cookieParser = require("cookie-parser");
 const dotenv = require('dotenv');
+const helmet = require('helmet'); // Import helmet
 const cors = require('cors'); // For cross-origin requests
 
 dotenv.config(); // Load environment variables
@@ -11,6 +12,7 @@ dotenv.config(); // Load environment variables
 const PORT = process.env.PORT || 4000;
 // Connecting to database
 database.connect();
+app.use(helmet());
 
 // Middlewares
 app.use(express.json());
@@ -37,8 +39,11 @@ const adminRoutes = require('./routes/adminRoutes');
 const donationRoutes = require('./routes/donationRoutes');
 const profileRoute = require('./routes/ProfileRoute');
 const withdrawRoutes= require('./routes/withdrawRoutes')
-// app.use('/api/admin', adminRoutes);
+// Import routes
+const walletTransactionRoutes = require('./routes/walletTransactionRoutes');
 // Setting up routes
+// Mount routes
+app.use('/api/v1/wallet-transactions', walletTransactionRoutes);
 app.use("/api/v1/auth", registrationRoutes);
 app.use("/api/v1/withdraw", withdrawRoutes);
 
