@@ -38,12 +38,16 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.withdrawals = async (req, res) => {
-  console.log("withdrswals called")
   try {
-    const requests = await WithdrawRequest.find().populate("user", "email walletBalance").exec();;
-    console.log(requests);
+    const requests = await WithdrawRequest.find().populate({
+      path: 'user',
+      select: 'email walletBalance',
+    }).exec();
+
     res.status(200).json(requests);
   } catch (err) {
+    console.error("Withdraw fetch error:", err);
     res.status(500).json({ message: "Failed to fetch" });
   }
 };
+
