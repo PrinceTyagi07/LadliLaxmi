@@ -131,11 +131,11 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.virtual("totalDonationsReceived").get(function () {
-   return this.donationsReceived.length;
+   return this.donationsReceived?.length;
 });
 
 userSchema.virtual("totalDonationsSent").get(function () {
-   return this.donationsSent.length;
+   return this.donationsSent?.length;
 });
 
 // userSchema.index({ referralCode: 1 }, { unique: true });
