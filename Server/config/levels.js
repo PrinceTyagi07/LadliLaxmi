@@ -10,7 +10,7 @@
 // config/level.js
 
 exports.LEVELS_CONFIG = {
-  1: { amount: 400, receiverShare: 300, sponsorShare: 50, description: "Level 1 Activation" },
+  1: { amount: 400, receiverShare: 300, sponsorShare: 100, description: "Level 1 Activation" },
   2: { amount: 500, receiverShare: 500, sponsorShare: 0, description: "Level 2 Activation" },
   3: { amount: 1000, receiverShare: 1000, sponsorShare: 0, description: "Level 3 Activation" },
   4: { amount: 2000, receiverShare: 2000, sponsorShare: 0, description: "Level 4 Activation" },
