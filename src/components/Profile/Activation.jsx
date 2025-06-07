@@ -146,6 +146,8 @@ console.log("res",res)
       console.error('Error during level activation:', error);
       toast.error('Could not activate level. ' + (error.message || 'Please try again.'));
     } finally {
+      toast.dismiss(toastId);
+      if (loading) setLoading(false);
       // The `finally` block might sometimes fire before `paymentObject.on` for modal dismiss.
       // It's often better to handle `setLoading(false)` inside `handler` and `ondismiss`.
       // For now, let's keep it, but be aware.

@@ -28,12 +28,12 @@ const Profile = () => {
   if (!user) return <div className="text-center mt-20 text-xl">Loading...</div>;
 
   return (
-    <div className="min-h-screen  bg-gray-800 sm:p-6 md:p-1">
-      <div className="flex flex-col items-start lg:flex-row mx-auto">
-        <div className="w-full lg:w-1/4">
+    <div className="min-h-screen bg-gray-800 sm:p-6 md:p-1">
+      <div className="flex flex-col items-start  md:flex-row mx-auto">
+        <div className="w-full  md:w-1/5">
           <UserSidebar user={user} />
         </div>
-        <div className="w-full  lg:w-3/4 rounded-lg shadow-lg ">
+        <div className="w-full  md:w-4/5 rounded-lg shadow-lg ">
           <Main user={user} />
         </div>
       </div>

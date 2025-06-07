@@ -7,9 +7,13 @@ require("dotenv").config();
 
 // Ensure process.env.JWT_SECRET is set in your .env file
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, {
-    expiresIn: "3d",
-  });
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "3d",
+    }
+  );
 };
 
 // @route   POST /api/auth/register
@@ -106,10 +110,10 @@ exports.register = async (req, res) => {
       name,
       email,
       password: hashed,
-      referralCode: newReferralCode, // Assign generated code
-      sponserdBy: referredBy,
-      referredBy: slotUser.referralCode , // Set referredBy to the referralCode of the user they are placed under
-      currentLevel: 0, // Initial level, can be updated upon activation/donation
+      referralCode: newReferralCode, // Generated code for new user
+      sponserdBy: referredBy ? referredBy : referrer.referralCode,
+      referredBy: slotUser.referralCode, // Always set to slot user's referralCode
+      currentLevel: 0, // Initial level
     });
 
     await newUser.save(); // Save the new user first to get their _id
@@ -174,7 +178,7 @@ exports.login = async (req, res) => {
     // Login successful
     const token = generateToken(user);
     user.token = token;
-    console.log(token)
+    console.log(token);
     const options = {
       expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
       httpOnly: true, // Prevent client-side JS from accessing the cookie
