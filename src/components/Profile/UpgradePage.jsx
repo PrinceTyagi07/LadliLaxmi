@@ -77,8 +77,8 @@ const UpgradePage = ({ user }) => {
   };
 
   return (
-    <div className='flex sm:mt-1 lg:mt-20 items-center justify-center mx-auto w-full'>
-      <div className="p-6  w-1/3 mx-auto bg-white rounded shadow flex flex-col justify-center relative">
+    <div className='flex sm:mt-1 lg:mt-20 items-center justify-center  '>
+      <div className="p-6  md:w-1/3 mx-auto bg-white rounded shadow flex flex-col justify-center relative">
       <h2 className="text-2xl font-bold mb-4 text-gray-800">
         Upgrade to Level {nextLevel}
       </h2>
