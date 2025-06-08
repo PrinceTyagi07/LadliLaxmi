@@ -1,12 +1,16 @@
 // src/pages/Activation.jsx
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
-import { createDonationOrder, verifyDonationPayment } from '../../services/operations/donationOperations';
-import { LEVELS_CONFIG_FRONTEND } from '../../config/levelsConfigFrontend';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import {
+  createDonationOrder,
+  verifyDonationPayment,
+} from "../../services/operations/donationOperations";
+import { LEVELS_CONFIG_FRONTEND } from "../../config/levelsConfigFrontend";
 
 // Placeholder for your Razorpay logo
-import rzpLogo from '../../assets/Logo.jpeg';
+import rzpLogo from "../../assets/Logo.jpeg";
+import QRcode from "../../assets/QRcode.jpg";
 
 // function loadScript(src) {
 //   return new Promise((resolve) => {
@@ -95,7 +99,7 @@ import rzpLogo from '../../assets/Logo.jpeg';
 //       }
 
 //       const { order } = orderResponse.data;
-      
+
 //       const options = {
 //         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
 //         currency: order.currency,
@@ -108,7 +112,7 @@ import rzpLogo from '../../assets/Logo.jpeg';
 //           name: `${user.firstName} ${user.lastName}`,
 //           email: user.email,
 //         },
-      
+
 //         handler: async function (response) {
 //           console.log("response: ",response);
 //           // Explicitly construct the paymentData object to ensure all required fields are passed
@@ -240,7 +244,7 @@ const Activation = () => {
 
   const [user, setUser] = useState(() => {
     try {
-      const storedUser = localStorage.getItem('user');
+      const storedUser = localStorage.getItem("user");
       return storedUser ? JSON.parse(storedUser) : null;
     } catch (e) {
       console.error("Failed to parse user from localStorage", e);
@@ -248,21 +252,44 @@ const Activation = () => {
     }
   });
   return (
-    <div>
-      <div>Activation</div>
-      <div>
-    <img src="" alt="" />
-      <p>After Payment Please Send Screen Shot on WhatsApp</p>
-      <p>[]It takes upto 12Hr in your level Activation</p>
+    <div className="w-full flex flex-col justify-center items-center">
+      <div className="border-b p-4 text-4xl rounded-md">Activation</div>
+      <div className="flex flex-col md:flex-row mt-4 gap-10 items-center ">
+        <div className="flex flex-col  items-center">
+          <img className="p-4 h-[25rem] w-[20rem]" src={QRcode} alt="" />
+          <p className="text-7xl p-4 mt-0">
+            ☝🏻 <p className="text-xl">Pay Here</p>{" "}
+          </p>
+        </div>
+        <div className="flex flex-col  text-xl gap-4 p-4 px-8">
+          <p className="text-red-400 text-2xl ">Instructions-</p>
+          <p>After Payment</p>
+          <p> Please Send Screen Shot on </p>
+          <p className="text-2xl w-full py-4 bg-gray-900 p-2 rounded-2xl">
+            WhatsApp<span className="w-20px">:-</span>{" "}
+            <strong>+91 78200 09103</strong>{" "}
+          </p>
+          <p className="text-amber-300">
+            Along with Name , Email id & Referral code
+          </p>
+          <p>It takes upto 12Hr in your</p>
+          <p> Level 1 Activation</p>
+          <button
+        type="button"
+        className="p-4 bg-gray-900 text-2xl mt-4 border rounded-lg cursor-pointer hover:scale-90"
+        onClick={() => {
+          navigate("/userdashboard");
+        }}
+      >
+        Go to DashBoard
+      </button>
+        </div>
+        
       </div>
-      <div onClick={()=>{
-        navigate('/userdashboard');
-      }}>
-        Go back
-      </div>
+
+      
     </div>
+  );
+};
 
-  )
-}
-
-export default Activation
+export default Activation;
