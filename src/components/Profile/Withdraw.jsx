@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+
 // Consider moving this config to a separate file (e.g., constants.js)
 const MAX_WITHDRAWAL_PER_LEVEL = {
   1: 0,
@@ -138,9 +139,9 @@ const Withdraw = ({ user }) => {
 
   return (
     <div className="min-h-screen flex w-full items-center justify-center mx-auto  px-4 sm:px-6 lg:px-8">
-      <div className=" w-full lg:w-[60%] bg-white shadow-xl rounded-lg p-6 sm:p-8 border border-gray-200">
+      <div className=" w-full lg:w-[60%] bg-gray-50 shadow-xl rounded-lg p-6 sm:p-8 border border-gray-200">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 text-center mb-8">
-          <i className="fas fa-wallet mr-2 text-blue-600"></i>Withdraw Funds
+          <i className="fas fa-wallet mr-2 text-blue-600 bg-black w-full"></i>Withdraw Funds
         </h2>
 
         {/* Current Balances & Limits Section */}
@@ -184,10 +185,10 @@ const Withdraw = ({ user }) => {
           {/* Bank Details Section (Conditional) */}
           {!bankDetails ? (
             <div className="grid grid-cols-1 gap-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Enter Bank Details</h3>
+              <h3 className="text-lg font-semibold  text-gray-800 mb-2">Enter Bank Details</h3>
               {["accountHolder", "accountNumber", "ifscCode", "bankName"].map((field) => (
                 <div key={field}>
-                  <label htmlFor={field} className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor={field} className="block text-sm font-medium text-black mb-1">
                     {field === "accountHolder"
                       ? "Account Holder Name"
                       : field === "accountNumber"
@@ -203,7 +204,7 @@ const Withdraw = ({ user }) => {
                     value={formData[field]}
                     onChange={handleChange}
                     required
-                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-black placeholder-gray-500"
                     placeholder={`Enter ${field === "accountHolder" ? "Account Holder Name" : field === "accountNumber" ? "Account Number" : field === "ifscCode" ? "IFSC Code" : "Bank Name"}`}
                   />
                 </div>
@@ -211,7 +212,7 @@ const Withdraw = ({ user }) => {
             </div>
           ) : (
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Your Saved Bank Details:</h3>
+              <h3 className="text-lg font-semibold text-800 mb-2">Your Saved Bank Details:</h3>
               <p>
                 <strong>Account Holder:</strong> {bankDetails.accountHolder}
               </p>
@@ -224,7 +225,7 @@ const Withdraw = ({ user }) => {
               <p>
                 <strong>Bank Name:</strong> {bankDetails.bankName}
               </p>
-              <p className="mt-2 text-xs text-gray-600">
+              <p className="mt-2 text-xs text-black">
                 To update bank details, please contact support.
               </p>
             </div>
@@ -232,7 +233,7 @@ const Withdraw = ({ user }) => {
 
           {/* Withdraw Amount Input */}
           <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="amount" className="block text-sm font-medium text-black mb-1">
               Withdraw Amount (₹)
             </label>
             <input
@@ -245,7 +246,7 @@ const Withdraw = ({ user }) => {
               min={1}
               max={finalLimit}
               placeholder={`Maximum: ₹${finalLimit.toFixed(2)}`}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm no-spinner"
+              className="mt-1 block w-full text-black placeholder-gray-500 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm no-spinner"
             />
           </div>
 
