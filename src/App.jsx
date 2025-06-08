@@ -17,6 +17,7 @@ import Home from "./Pages/Home";
 import Registration from "./Pages/Registration";
 import Profile from "./Pages/Profile";
 import AdminMain from "./Admin/AdminMain";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 
 // Inline PrivateRoute component
@@ -98,6 +99,7 @@ let role=""
 
         {/* Fallback Route: For any unmatched paths, redirect to the Home page.
               This uses the 'Navigate' component for declarative redirection. */}
+        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

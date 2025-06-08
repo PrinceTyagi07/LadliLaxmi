@@ -55,7 +55,7 @@ export const verifyDonationPayment = async (paymentData , id , token) => {
            razorpay_payment_id:paymentData.razorpay_payment_id
             , razorpay_signature:paymentData.razorpay_signature,
             currentLevel:paymentData.currentLevel
- }, // Contains razorpay_payment_id, order_id, signature, currentLevel
+ }, 
         headers: {
           Authorization: `Bearer ${token}`
         }
