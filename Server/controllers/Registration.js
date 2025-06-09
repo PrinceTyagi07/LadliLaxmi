@@ -70,14 +70,15 @@ exports.register = async (req, res) => {
         });
       }
     } else {
-      // Case 2: No referral code provided, place under an admin
-      referrer = await User.findOne({ role: "Admin" }); // Find any admin user
+      // Case 2: No referral code provided, place under company
+      
+      referrer = await User.findOne({ referralCode: "R7079AEU" }); 
       if (!referrer) {
         // This is a critical error if no admin exists to place unreferred users
         return res.status(500).json({
           success: false,
           message:
-            "No admin user found to place unreferred signups. Please ensure an admin account exists.",
+            "No company id found to place unreferred signups. Please ensure an admin account exists.",
         });
       }
       console.log(
