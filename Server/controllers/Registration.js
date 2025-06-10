@@ -20,10 +20,10 @@ const generateToken = (user) => {
 // @desc    Register a new user
 // @access  Public
 exports.register = async (req, res) => {
-  const { name, email, password, confirmPassword, referredBy } = req.body; // referredBy will be the referralCode
+  const { name, email, password, phone,confirmPassword, referredBy } = req.body; // referredBy will be the referralCode
 
   try {
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !phone || !password || !confirmPassword) {
       return res.status(403).send({
         success: false,
         message: "All Fields are required",
@@ -113,6 +113,7 @@ exports.register = async (req, res) => {
       password: hashed,
       referralCode: newReferralCode, // Generated code for new user
       sponserdBy: referredBy ? referredBy : referrer.referralCode,
+      phone, // Include phone in response
       referredBy: slotUser.referralCode, // Always set to slot user's referralCode
       currentLevel: 0, // Initial level
     });
@@ -138,6 +139,7 @@ exports.register = async (req, res) => {
       email: newUser.email, // Include email in response
       name: newUser.name, // Include name in response
       referralCode: newUser.referralCode, // Include new user's referral code
+      phone: newUser.phone,
       token: generateToken(newUser._id), // Use newUser._id for token generation
       message: "Registration successful. Please activate your account.",
     });
